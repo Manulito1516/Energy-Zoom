@@ -1,0 +1,4 @@
+#ignore all .exe and linux binary files
+*.exe
+/build/*
+*.geany
