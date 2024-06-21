@@ -8,8 +8,8 @@
 
 class Highway{
 public:
-	static const int HIGHWAY_MAX_W = 16;
-	static const int HIGHWAY_MAX_H = 8;
+	static const int HIGHWAY_TEX_W = 16;
+	static const int HIGHWAY_TEX_H = 8;
 	static const float HIGHWAY_VEL;
 
 	//Maximum axis velocity of the highway
@@ -20,9 +20,11 @@ public:
 	void takeInput(SDL_Event &e);
 	void update();
 	void render();
-
+	
+	int get_posZ() const { return mPosZ; }
+	float get_vel() const { return mVel; }
 private:
-	int mPosX, mPosY;
+	int mPosX, mPosY, mPosZ;
 	int mStartPosY;
 	
 	//More resolution i guess
@@ -42,7 +44,7 @@ private:
 	float mRoadX, mRoadAngle; // perspective of position and turn
 	
 	std::string mTexturePath;
-    ME_Texture mTexture;
+	ME_Texture mTexture;
 };
 
 #endif

@@ -31,7 +31,7 @@ extern std::vector<ME_Texture*> g_textures;
 
 const int g_fontSize = 10;
 const int g_fontSpacing = 8;
-extern ME_Texture g_fontTexture;
+extern ME_Texture g_manusFont;
 
 // Road globals
 extern float g_roadTurn;

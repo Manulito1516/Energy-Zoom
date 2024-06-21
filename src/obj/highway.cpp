@@ -31,7 +31,7 @@ Highway::Highway(){
 	//Clip texture rect
 	mClip.x = 0;
 	mClip.y = 0; // cambiar esto tambien en el while (render)
-	mClip.w = HIGHWAY_MAX_W;
+	mClip.w = HIGHWAY_TEX_W;
 	mClip.h = 1; // cambiar esto tambien en el while (render)
 	
 	// para texturizado por distancia
@@ -39,6 +39,7 @@ Highway::Highway(){
 	mCloseness = 0; // cercania con el PoV
 	
 	// efectos de avance, perspectiva y giro
+	mPosZ = 0;
 	mRoadX = -26;
 	
 	mRoadAngle = mRoadX;
@@ -49,7 +50,7 @@ Highway::Highway(){
 	mClipYf = 0.5; // posicion del clip.y basada en la velocidad del jugador
 	
 	mTexturePath = "assets/sprites/highway.png";
-	mTexture.load(mTexturePath, HIGHWAY_MAX_W, HIGHWAY_MAX_H);
+	mTexture.load(mTexturePath, HIGHWAY_TEX_W, HIGHWAY_TEX_H);
 	g_textures.push_back(&mTexture); // add to the end of the vector/array
 }
 
@@ -94,10 +95,10 @@ void Highway::render(){
 	mPosXf = (SCREEN_WIDTH / 2 - mWidthf) + ((SCREEN_WIDTH) * sin(g_roadTurn));
 	
 	// Going forward/backwards and looping the texture
-	if (mClipYf >= HIGHWAY_MAX_H){ // ATRAS
+	if (mClipYf >= HIGHWAY_TEX_H){ // ATRAS
 		mClipYf = 0;
 	} else if (mClipYf <= 0){ // ADELANTE
-		mClipYf = HIGHWAY_MAX_H;
+		mClipYf = HIGHWAY_TEX_H;
 	}
 	mClip.y = (int)mClipYf;
 	
@@ -126,7 +127,7 @@ void Highway::render(){
 		// -----TEXTURIZING based on distance
 		--mWait; // wait controla cuantos ciclos deben pasar hasta renderizar la siguiente fila
 		if (mWait < 0){
-			if (mClip.y < HIGHWAY_MAX_H - 1){
+			if (mClip.y < HIGHWAY_TEX_H - 1){
 				++mClip.y;
 			} else {
 				mClip.y = 0;

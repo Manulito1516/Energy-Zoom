@@ -72,6 +72,8 @@ int main(int argc, char* args[]){
 				
 				// FPS COUNTER
 				timeText = "FPS: " + std::to_string(avgFPS);
+				std::string debugText = "highway.mPosZ: " + std::to_string(o_highway.get_posZ());
+				std::string debugText2 = "highway.mVel: " + std::to_string(o_highway.get_vel());
 				
 				// clear screen
 				SDL_SetRenderDrawColor(g_renderer, 0x00, 0x00, 0x00, 0xFF);
@@ -82,7 +84,9 @@ int main(int argc, char* args[]){
 				o_highway.render();
 				o_car.render();
 				//obj.render();
-				g_fontTexture.renderText(0,0, timeText);
+				g_manusFont.renderText(0,0, timeText);
+				g_manusFont.renderText(0,12, debugText);
+				g_manusFont.renderText(0,24, debugText2);
 				
 				// update screen
 				SDL_RenderPresent(g_renderer);

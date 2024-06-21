@@ -14,7 +14,7 @@ SDL_Renderer *g_renderer = NULL;
 bool g_fullscreen = false;
 bool g_soft_render = false;
 
-ME_Texture g_fontTexture;
+ME_Texture g_manusFont;
 
 // vector (dinamic array) where the textures will be listed
 std::vector<ME_Texture*> g_textures;
@@ -65,7 +65,7 @@ bool init(){
 
 void close(){
 	// close font (ME_Texture)
-	g_fontTexture.free();
+	g_manusFont.free();
 	
 	//Free the textures
 	for (int i = 0; i < g_textures.size(); ++i){
@@ -85,7 +85,7 @@ void close(){
 // assets
 bool loadAssets(){
 	bool success = true;
-	g_fontTexture.load("assets/manus.png", 128, 64);
+	g_manusFont.load("assets/manus.png", 128, 64);
 	
 	return success;
 }
