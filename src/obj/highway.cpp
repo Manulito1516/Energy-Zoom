@@ -17,9 +17,10 @@ Highway::Highway(){
 	
 	mStartPosY = SCREEN_HEIGHT * (1.00/3.00);
 
-	mVelX = 0;
+	mPosZf = 0.0;
 	mVel = 0.0;
 	mAcceleration = 0.0;
+	mVelX = 0;
 	mTurnVel = 0;
 	
 	//Scale texture rect
@@ -39,7 +40,6 @@ Highway::Highway(){
 	mCloseness = 0; // cercania con el PoV
 	
 	// efectos de avance, perspectiva y giro
-	mPosZ = 0;
 	mRoadX = -26;
 	
 	mRoadAngle = mRoadX;
@@ -58,10 +58,11 @@ void Highway::takeInput(SDL_Event &e){
 	// If a key was pressed
 	if(e.type == SDL_KEYDOWN && e.key.repeat == 0){
 		switch(e.key.keysym.sym){
+			// inputs
 			case SDLK_LEFT: ++mVelX; break;
 			case SDLK_RIGHT: --mVelX; break;
-			case SDLK_UP: mAcceleration -= HIGHWAY_VEL; break;
-			case SDLK_DOWN: mAcceleration += HIGHWAY_VEL; break;
+			case SDLK_UP: mThrottle += HIGHWAY_VEL; break;
+			case SDLK_DOWN: mBrake += HIGHWAY_VEL * 100; break;
 			case SDLK_a: mTurnVel = -HIGHWAY_VEL; break;
 			case SDLK_d: mTurnVel = HIGHWAY_VEL; break;
 		}
@@ -69,10 +70,11 @@ void Highway::takeInput(SDL_Event &e){
 	//If a key was released
 	else if(e.type == SDL_KEYUP && e.key.repeat == 0){
 		switch(e.key.keysym.sym){
+			// evil inputs (release)
 			case SDLK_LEFT: --mVelX; break;
 			case SDLK_RIGHT: ++mVelX; break;
-			case SDLK_UP: mAcceleration += HIGHWAY_VEL; break;
-			case SDLK_DOWN: mAcceleration -= HIGHWAY_VEL; break;
+			case SDLK_UP: mThrottle -= HIGHWAY_VEL; break;
+			case SDLK_DOWN: mBrake -= HIGHWAY_VEL * 100; break;
 			case SDLK_a: mTurnVel = 0; break;
 			case SDLK_d: mTurnVel = 0; break;
 		}
@@ -83,10 +85,31 @@ void Highway::update(){
 	//Move the Highway left or right
 	mRoadX += mVelX;
 	g_roadTurn += mTurnVel;
-	mVel += mAcceleration;
-	mClipYf += mVel;
 	
-	mRoadX -= g_roadTurn * mVel;
+	// Acceleration and Z axis things
+	if (mVel < 0.85){
+		mAcceleration = mThrottle / 2; // THIS IS TEMPORARY, MAKE RPM SHIT LATER
+		mVel += mAcceleration;
+	}
+	
+	// "Friction", "air resistance", yeah, you get it
+	if (mVel > 0){
+		mVel -= HIGHWAY_VEL / 4 * (1+mBrake);
+	} else if (mVel < 0){
+		mVel += HIGHWAY_VEL / 4 * (1+mBrake);
+	}
+	
+	// Clip min values
+	if (mVel < 0.001 || mVel > 3){ // realistically speaking, 3 is too fast
+		mVel = 0;
+	}
+	
+	// Position (DON'T MODIFY DIRECTLY)
+	mClipYf += -mVel; // controls the texture side (note that this is negative)
+	mPosZf += mVel; // controls the position on circuit
+	
+	// Moves the car out if it goes straight during a turn
+	mRoadX += g_roadTurn * mVel * 5; // higher number means lower grip
 }
 
 void Highway::render(){
@@ -94,9 +117,9 @@ void Highway::render(){
 	mPosXf = (SCREEN_WIDTH / 2 - mWidthf) + ((SCREEN_WIDTH) * sin(g_roadTurn));
 	
 	// Going forward/backwards and looping the texture
-	if (mClipYf >= HIGHWAY_TEX_H){ // ATRAS
+	if (mClipYf >= HIGHWAY_TEX_H){ // BACKWARD
 		mClipYf = 0;
-	} else if (mClipYf <= 0){ // ADELANTE
+	} else if (mClipYf <= 0){ // FORWARD
 		mClipYf = HIGHWAY_TEX_H;
 	}
 	mClip.y = (int)mClipYf;
@@ -109,11 +132,12 @@ void Highway::render(){
 	// Como mRoadAngle va a ir cambiando dentro del loop, lo "reinicio" antes de entrar
 	mRoadAngle = mRoadX - ((SCREEN_WIDTH / 4) * sin(g_roadTurn));
 	while (mPosY < SCREEN_HEIGHT){
+		
 		// prepare to render
 		mScale.w = (int)mWidthf;
 		mPosX = (int)mPosXf;
 		
-		//render
+		// render
 		mTexture.render(mPosX, mPosY, &mScale, &mClip);
 		
 		// calculate road angle
