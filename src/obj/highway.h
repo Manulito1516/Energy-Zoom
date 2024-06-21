@@ -21,8 +21,9 @@ public:
 	void update();
 	void render();
 	
-	int get_posZ() const { return mPosZ; }
+	int get_posZ() const { return mClipYf; }
 	float get_vel() const { return mVel; }
+	float get_accel() const { return mAcceleration; }
 private:
 	int mPosX, mPosY, mPosZ;
 	int mStartPosY;

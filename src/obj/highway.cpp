@@ -9,7 +9,7 @@
 #include "../ME/ME_Texture.h"
 
 // arreglen los header carajo
-const float Highway::HIGHWAY_VEL = 0.05;
+const float Highway::HIGHWAY_VEL = 0.01;
 
 Highway::Highway(){	
 	mPosX = SCREEN_WIDTH / 2; // Centro
@@ -60,7 +60,7 @@ void Highway::takeInput(SDL_Event &e){
 		switch(e.key.keysym.sym){
 			case SDLK_LEFT: ++mVelX; break;
 			case SDLK_RIGHT: --mVelX; break;
-			case SDLK_UP: mAcceleration -= HIGHWAY_VEL / 2; break;
+			case SDLK_UP: mAcceleration -= HIGHWAY_VEL; break;
 			case SDLK_DOWN: mAcceleration += HIGHWAY_VEL; break;
 			case SDLK_a: mTurnVel = -HIGHWAY_VEL; break;
 			case SDLK_d: mTurnVel = HIGHWAY_VEL; break;
@@ -71,7 +71,7 @@ void Highway::takeInput(SDL_Event &e){
 		switch(e.key.keysym.sym){
 			case SDLK_LEFT: --mVelX; break;
 			case SDLK_RIGHT: ++mVelX; break;
-			case SDLK_UP: mAcceleration += HIGHWAY_VEL / 2; break;
+			case SDLK_UP: mAcceleration += HIGHWAY_VEL; break;
 			case SDLK_DOWN: mAcceleration -= HIGHWAY_VEL; break;
 			case SDLK_a: mTurnVel = 0; break;
 			case SDLK_d: mTurnVel = 0; break;
@@ -86,7 +86,6 @@ void Highway::update(){
 	mVel += mAcceleration;
 	mClipYf += mVel;
 	
-	//mAcceleration += HIGHWAY_VEL;
 	mRoadX -= g_roadTurn * mVel;
 }
 
