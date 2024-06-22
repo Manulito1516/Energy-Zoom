@@ -27,7 +27,7 @@ Highway::Highway(){
 	mScale.x = 0;
 	mScale.y = 0;
 	mScale.w = 2;
-	mScale.h = 2; 
+	mScale.h = 2;
 	
 	//Clip texture rect
 	mClip.x = 0;
