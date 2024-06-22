@@ -23,6 +23,10 @@ Highway::Highway(){
 	mVelX = 0;
 	mTurnVel = 0;
 	
+	// controls
+	mThrottle = 0.0;
+	mBrake = 0.0;
+	
 	//Scale texture rect
 	mScale.x = 0;
 	mScale.y = 0;
@@ -52,6 +56,28 @@ Highway::Highway(){
 	mTexturePath = "assets/sprites/highway.png";
 	mTexture.load(mTexturePath, HIGHWAY_TEX_W, HIGHWAY_TEX_H);
 	g_textures.push_back(&mTexture); // add to the end of the vector/array
+	
+	// temporary course
+	turnTrigger curva1;
+	curva1.pos = 200;
+	curva1.turnSpeed = 0.7;
+	curva1.turnObjective = 0.4;
+	mTriggers.push_back(&curva1);
+	
+	turnTrigger recta1;
+	recta1.pos = 350;
+	recta1.turnSpeed = 1;
+	recta1.turnObjective = 0;
+	mTriggers.push_back(&recta1);
+	
+}
+
+void Highway::readCourse(){ // Works as a second update
+	if ((int)mPosZf > mTriggers[0]->pos){
+		if (g_roadTurn < mTriggers[0]->turnObjective){
+			mTurnVel = mTriggers[0]->turnSpeed;
+		}
+	}
 }
 
 void Highway::takeInput(SDL_Event &e){
@@ -59,31 +85,31 @@ void Highway::takeInput(SDL_Event &e){
 	if(e.type == SDL_KEYDOWN && e.key.repeat == 0){
 		switch(e.key.keysym.sym){
 			// inputs
-			case SDLK_LEFT: ++mVelX; break;
-			case SDLK_RIGHT: --mVelX; break;
+			case SDLK_LEFT: mVelX += 1; break;
+			case SDLK_RIGHT: mVelX -= 1; break;
 			case SDLK_UP: mThrottle += HIGHWAY_VEL; break;
 			case SDLK_DOWN: mBrake += HIGHWAY_VEL * 100; break;
-			case SDLK_a: mTurnVel = -HIGHWAY_VEL; break;
-			case SDLK_d: mTurnVel = HIGHWAY_VEL; break;
+			//case SDLK_a: mTurnVel = -HIGHWAY_VEL; break;
+			//case SDLK_d: mTurnVel = HIGHWAY_VEL; break;
 		}
 	}
 	//If a key was released
 	else if(e.type == SDL_KEYUP && e.key.repeat == 0){
 		switch(e.key.keysym.sym){
 			// evil inputs (release)
-			case SDLK_LEFT: --mVelX; break;
-			case SDLK_RIGHT: ++mVelX; break;
+			case SDLK_LEFT: mVelX -= 1; break;
+			case SDLK_RIGHT: mVelX += 1; break;
 			case SDLK_UP: mThrottle -= HIGHWAY_VEL; break;
 			case SDLK_DOWN: mBrake -= HIGHWAY_VEL * 100; break;
-			case SDLK_a: mTurnVel = 0; break;
-			case SDLK_d: mTurnVel = 0; break;
+			//case SDLK_a: mTurnVel = 0; break;
+			//case SDLK_d: mTurnVel = 0; break;
 		}
 	}
 }
 
 void Highway::update(){
 	//Move the Highway left or right
-	mRoadX += mVelX;
+	mRoadX += mVelX / (1+mVel);
 	g_roadTurn += mTurnVel;
 	
 	// Acceleration and Z axis things
@@ -91,7 +117,6 @@ void Highway::update(){
 		mAcceleration = mThrottle / 2; // THIS IS TEMPORARY, MAKE RPM SHIT LATER
 		mVel += mAcceleration;
 	}
-	
 	// "Friction", "air resistance", yeah, you get it
 	if (mVel > 0){
 		mVel -= HIGHWAY_VEL / 4 * (1+mBrake);
@@ -100,16 +125,17 @@ void Highway::update(){
 	}
 	
 	// Clip min values
-	if (mVel < 0.001 || mVel > 3){ // realistically speaking, 3 is too fast
+	if (mVel < 0.001 || mVel > 3.0){ // realistically speaking, 3 is too fast
 		mVel = 0;
 	}
+	
 	
 	// Position (DON'T MODIFY DIRECTLY)
 	mClipYf += -mVel; // controls the texture side (note that this is negative)
 	mPosZf += mVel; // controls the position on circuit
 	
 	// Moves the car out if it goes straight during a turn
-	mRoadX += g_roadTurn * mVel * 5; // higher number means lower grip
+	mRoadX += g_roadTurn;// * mVel * 5; // higher number means lower grip
 }
 
 void Highway::render(){

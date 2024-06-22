@@ -3,8 +3,10 @@
 
 #include <SDL2/SDL.h>
 #include <string.h>
+#include <vector>
 
 #include "../ME/ME_Texture.h"
+#include "../setup.h"
 
 class Highway{
 public:
@@ -13,14 +15,17 @@ public:
 	static const float HIGHWAY_VEL;
 
 	Highway();
-
+	void readCourse();
 	void takeInput(SDL_Event &e);
 	void update();
 	void render();
 	
+	float get_roadX() const { return mRoadX; }
 	float get_posZ() const { return mPosZf; }
 	float get_vel() const { return mVel; }
 	float get_accel() const { return mAcceleration; }
+	float get_throttle() const { return mThrottle; }
+	float get_brake() const { return mBrake; }
 private:
 	int mPosX, mPosY;
 	int mStartPosY;
@@ -33,6 +38,9 @@ private:
 	
 	// controls of the car
 	float mThrottle, mBrake;
+	
+	// course
+	std::vector<turnTrigger*> mTriggers;
 	
 	//The scale and clip for the render function (drawing in the distance)
 	SDL_Rect mScale;
