@@ -1,7 +1,10 @@
 #include "highway.h"
 
+#include <iostream>
+#include <fstream>
 #include <cmath>
 #include <stdio.h>
+#include <stdlib.h>
 #include <vector>
 #include <string.h>
 
@@ -29,6 +32,9 @@ Highway::Highway(){
 	mTriggerTurnTarget = 0.5;
 	mTriggerTurnSpeed = 0.002;
 	mTriggerLoopPos = 500;
+	
+	std::ifstream Track;
+	Track.open("tracks/oval");
 
 	//Scale texture rect
 	mScale.x = 0;
@@ -59,6 +65,10 @@ Highway::Highway(){
 	mTexturePath = "assets/sprites/highway.png";
 	mTexture.load(mTexturePath, HIGHWAY_TEX_W, HIGHWAY_TEX_H);
 	g_textures.push_back(&mTexture); // add to the end of the vector/array
+}
+
+Highway::~Highway(){
+	Track.close();
 }
 
 void Highway::takeInput(SDL_Event &e){
@@ -140,9 +150,11 @@ void Highway::readRoad(){
 		
 		// same case just after :)
 		if (mTriggerTurnTarget > 0 && g_roadTurn > mTriggerTurnTarget) {
-			nextTrigger();
+			mTriggerNumber++;
+			loadTrigger();
 		} else if (mTriggerTurnTarget < 0 && g_roadTurn < mTriggerTurnTarget) {
-			nextTrigger();
+			mTriggerNumber++;
+			loadTrigger();
 		}
 	}
 	
@@ -151,20 +163,33 @@ void Highway::readRoad(){
 		mTriggerNumber = 0;
 		mPosZf = 0;
 		
-		mTriggerPos = 100;
-		mTriggerTurnTarget = 0.5;
-		mTriggerTurnSpeed = 0.002;
-		mTriggerLoopPos = 500;
+		loadTrigger();
 	}
 }
 
-void Highway::nextTrigger(){
-	mTriggerNumber++;
+void Highway::loadTrigger(){
+	// make temp strings
+	std::string sTriggerPos;
+	std::string sTriggerTurnTarget;
+	std::string sTriggerTurnPos;
 	
-	// temp
-	mTriggerTurnSpeed = 0.001;
+	// move the cursor to the trigger number
+	Track.seekg(mTriggerNumber, std::ifstream::beg);
+	
+	// save the data from file Track to strings
+	std::getline(Track, sTriggerPos, ',');
+	std::getline(Track, sTriggerTurnTarget, ',');
+	std::getline(Track, sTriggerTurnPos, ';');
+	
+	// string to int, string to double (float)
+	mTriggerPos = atoi(sTriggerPos.c_str());
+	mTriggerTurnTarget = atof(sTriggerTurnTarget);
+	mTriggerTurnSpeed = atof(sTriggerTurnPos);
+	
+	// temp 
+	/*mTriggerTurnSpeed = 0.001;
 	mTriggerTurnTarget = 0;
-	mTriggerPos = 180;
+	mTriggerPos = 180; */
 }
 
 void Highway::render(){
