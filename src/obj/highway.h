@@ -24,23 +24,21 @@ public:
 	float get_posZ() const { return mPosZf; }
 	float get_vel() const { return mVel; }
 	float get_accel() const { return mAcceleration; }
-	float get_nextTrigger() const { return mNextTrigger; }
+	float get_nextTrigger() const { return mTriggerNumber; }
 private:
 	int mPosX, mPosY;
 	int mStartPosY;
 	
 	// More resolution i guess
-	float mPosXf, mPosZf, mWidthf, mClipYf;
-
-	int mVelX;
+	float mPosXf, mVelXf, mPosZf, mWidthf, mClipYf;
 	float mTurnVel, mVel, mAcceleration;
 	
 	// controls of the car
 	float mThrottle, mBrake;
 	
 	// read road
-	int mNextTrigger, mNextPos;
-	float mNextTurnSpeed, mNextTurnTarget;
+	int mTriggerNumber, mTriggerPos, mTriggerLoopPos;
+	float mTriggerTurnSpeed, mTriggerTurnTarget;
 	
 	
 	// The scale and clip for the render function (drawing in the distance)

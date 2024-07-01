@@ -20,14 +20,15 @@ Highway::Highway(){
 	mPosZf = 0.0;
 	mVel = 0.0;
 	mAcceleration = 0.0;
-	mVelX = 0;
+	mVelXf = 0;
 	mTurnVel = 0;
 
 	// Read road
-	mNextTrigger = 0;
-	mNextPos = 100;
-	mNextTurnTarget = 0.5;
-	mNextTurnSpeed = 0.005;
+	mTriggerNumber = 0;
+	mTriggerPos = 100;
+	mTriggerTurnTarget = 0.5;
+	mTriggerTurnSpeed = 0.002;
+	mTriggerLoopPos = 500;
 
 	//Scale texture rect
 	mScale.x = 0;
@@ -65,8 +66,8 @@ void Highway::takeInput(SDL_Event &e){
 	if(e.type == SDL_KEYDOWN && e.key.repeat == 0){
 		switch(e.key.keysym.sym){
 			// inputs
-			case SDLK_LEFT: ++mVelX; break;
-			case SDLK_RIGHT: --mVelX; break;
+			case SDLK_LEFT: mVelXf += 0.5; break;
+			case SDLK_RIGHT: mVelXf -= 0.5; break;
 			case SDLK_UP: mThrottle += HIGHWAY_VEL; break;
 			case SDLK_DOWN: mBrake += HIGHWAY_VEL * 100; break;
 			//case SDLK_a: mTurnVel = -HIGHWAY_VEL; break;
@@ -77,8 +78,8 @@ void Highway::takeInput(SDL_Event &e){
 	else if(e.type == SDL_KEYUP && e.key.repeat == 0){
 		switch(e.key.keysym.sym){
 			// evil inputs (release)
-			case SDLK_LEFT: --mVelX; break;
-			case SDLK_RIGHT: ++mVelX; break;
+			case SDLK_LEFT: mVelXf -= 0.5; break;
+			case SDLK_RIGHT: mVelXf += 0.5; break;
 			case SDLK_UP: mThrottle -= HIGHWAY_VEL; break;
 			case SDLK_DOWN: mBrake -= HIGHWAY_VEL * 100; break;
 			//case SDLK_a: mTurnVel = 0; break;
@@ -89,7 +90,7 @@ void Highway::takeInput(SDL_Event &e){
 
 void Highway::update(){
 	//Move the Highway left or right
-	mRoadX += mVelX;
+	mRoadX += mVelXf;
 	g_roadTurn += mTurnVel;
 	
 	// Acceleration and Z axis things
@@ -115,37 +116,55 @@ void Highway::update(){
 	mPosZf += mVel; // controls the position on circuit
 	
 	// Moves the car out if it goes straight during a turn
-	mRoadX += g_roadTurn * mVel * 5; // higher number means lower grip
+	mRoadX += g_roadTurn * mVel * 2; // higher number means lower grip
 }
 
 void Highway::readRoad(){
-	if (mPosZf > mNextPos){ // after trigger position
-		// first check positivity, then if it's lower...
-		if (mNextTurnTarget > 0 && g_roadTurn < mNextTurnTarget) {
-			mTurnVel = mNextTurnSpeed * (1+mVel); // turns right
+	if (mPosZf > mTriggerPos){ // after trigger position
+		
+		// first check positivity, then if it's not enough...
+		if (mTriggerTurnTarget >= 0 && g_roadTurn < mTriggerTurnTarget) {
+			mTurnVel = mTriggerTurnSpeed * (1+mVel); // turns right
+			
+		// check negativity, if it's not enough...
+		} else if (mTriggerTurnTarget <= 0 && g_roadTurn > mTriggerTurnTarget) {
+			mTurnVel = -mTriggerTurnSpeed * (1+mVel); // turns left
 		} else {
-			mTurnVel = -mNextTurnSpeed * (1+mVel); // turns left
+			mTurnVel = 0;
 		}
 		
-		if (mNextTurnTarget == 0 && ((g_roadTurn > -0.05) || (g_roadTurn < 0.05))) {
+		if (mTriggerTurnTarget == 0 && g_roadTurn > -0.01 && g_roadTurn < 0.01) {
 			mTurnVel = 0;
 			g_roadTurn = 0;
 		}
 		
 		// same case just after :)
-		if (mNextTurnTarget > 0 && g_roadTurn > mNextTurnTarget) {
+		if (mTriggerTurnTarget > 0 && g_roadTurn > mTriggerTurnTarget) {
 			nextTrigger();
-		} else if (mNextTurnTarget < 0 && g_roadTurn < mNextTurnTarget) {
+		} else if (mTriggerTurnTarget < 0 && g_roadTurn < mTriggerTurnTarget) {
 			nextTrigger();
 		}
+	}
+	
+	if (mPosZf > mTriggerLoopPos){
+		// temp
+		mTriggerNumber = 0;
+		mPosZf = 0;
+		
+		mTriggerPos = 100;
+		mTriggerTurnTarget = 0.5;
+		mTriggerTurnSpeed = 0.002;
+		mTriggerLoopPos = 500;
 	}
 }
 
 void Highway::nextTrigger(){
-	mNextTrigger++;
-	mNextTurnSpeed = 0.001;
-	mNextTurnTarget = 0;
-	mNextPos = 180;
+	mTriggerNumber++;
+	
+	// temp
+	mTriggerTurnSpeed = 0.001;
+	mTriggerTurnTarget = 0;
+	mTriggerPos = 180;
 }
 
 void Highway::render(){
