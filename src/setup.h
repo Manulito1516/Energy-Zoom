@@ -45,13 +45,4 @@ extern void close();
 extern bool loadAssets();
 extern float degToRad(float degrees);
 
-//-----------------------
-// structs (oh no)
-
-struct turnTrigger{
-	int pos;
-	float turnSpeed;
-	float turnObjective; // from -0.5 to 0.5 unless you want to go out of screen
-};
-
 #endif
