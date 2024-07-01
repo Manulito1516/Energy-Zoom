@@ -16,16 +16,20 @@ public:
 
 	void takeInput(SDL_Event &e);
 	void update();
+	void readRoad();
 	void render();
+	
+	void nextTrigger();
 	
 	float get_posZ() const { return mPosZf; }
 	float get_vel() const { return mVel; }
 	float get_accel() const { return mAcceleration; }
+	float get_nextTrigger() const { return mNextTrigger; }
 private:
 	int mPosX, mPosY;
 	int mStartPosY;
 	
-	//More resolution i guess
+	// More resolution i guess
 	float mPosXf, mPosZf, mWidthf, mClipYf;
 
 	int mVelX;
@@ -34,7 +38,12 @@ private:
 	// controls of the car
 	float mThrottle, mBrake;
 	
-	//The scale and clip for the render function (drawing in the distance)
+	// read road
+	int mNextTrigger, mNextPos;
+	float mNextTurnSpeed, mNextTurnTarget;
+	
+	
+	// The scale and clip for the render function (drawing in the distance)
 	SDL_Rect mScale;
 	SDL_Rect mClip;
 	

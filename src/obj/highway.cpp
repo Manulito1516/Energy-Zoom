@@ -22,7 +22,13 @@ Highway::Highway(){
 	mAcceleration = 0.0;
 	mVelX = 0;
 	mTurnVel = 0;
-	
+
+	// Read road
+	mNextTrigger = 0;
+	mNextPos = 100;
+	mNextTurnTarget = 0.5;
+	mNextTurnSpeed = 0.005;
+
 	//Scale texture rect
 	mScale.x = 0;
 	mScale.y = 0;
@@ -63,8 +69,8 @@ void Highway::takeInput(SDL_Event &e){
 			case SDLK_RIGHT: --mVelX; break;
 			case SDLK_UP: mThrottle += HIGHWAY_VEL; break;
 			case SDLK_DOWN: mBrake += HIGHWAY_VEL * 100; break;
-			case SDLK_a: mTurnVel = -HIGHWAY_VEL; break;
-			case SDLK_d: mTurnVel = HIGHWAY_VEL; break;
+			//case SDLK_a: mTurnVel = -HIGHWAY_VEL; break;
+			//case SDLK_d: mTurnVel = HIGHWAY_VEL; break;
 		}
 	}
 	//If a key was released
@@ -75,8 +81,8 @@ void Highway::takeInput(SDL_Event &e){
 			case SDLK_RIGHT: ++mVelX; break;
 			case SDLK_UP: mThrottle -= HIGHWAY_VEL; break;
 			case SDLK_DOWN: mBrake -= HIGHWAY_VEL * 100; break;
-			case SDLK_a: mTurnVel = 0; break;
-			case SDLK_d: mTurnVel = 0; break;
+			//case SDLK_a: mTurnVel = 0; break;
+			//case SDLK_d: mTurnVel = 0; break;
 		}
 	}
 }
@@ -110,6 +116,36 @@ void Highway::update(){
 	
 	// Moves the car out if it goes straight during a turn
 	mRoadX += g_roadTurn * mVel * 5; // higher number means lower grip
+}
+
+void Highway::readRoad(){
+	if (mPosZf > mNextPos){ // after trigger position
+		// first check positivity, then if it's lower...
+		if (mNextTurnTarget > 0 && g_roadTurn < mNextTurnTarget) {
+			mTurnVel = mNextTurnSpeed * (1+mVel); // turns right
+		} else {
+			mTurnVel = -mNextTurnSpeed * (1+mVel); // turns left
+		}
+		
+		if (mNextTurnTarget == 0 && ((g_roadTurn > -0.05) || (g_roadTurn < 0.05))) {
+			mTurnVel = 0;
+			g_roadTurn = 0;
+		}
+		
+		// same case just after :)
+		if (mNextTurnTarget > 0 && g_roadTurn > mNextTurnTarget) {
+			nextTrigger();
+		} else if (mNextTurnTarget < 0 && g_roadTurn < mNextTurnTarget) {
+			nextTrigger();
+		}
+	}
+}
+
+void Highway::nextTrigger(){
+	mNextTrigger++;
+	mNextTurnSpeed = 0.001;
+	mNextTurnTarget = 0;
+	mNextPos = 180;
 }
 
 void Highway::render(){
