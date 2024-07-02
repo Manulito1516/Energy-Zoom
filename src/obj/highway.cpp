@@ -183,8 +183,8 @@ void Highway::loadTrigger(){
 	
 	// string to int, string to double (float)
 	mTriggerPos = atoi(sTriggerPos.c_str());
-	mTriggerTurnTarget = (float)atof(sTriggerTurnTarget.c_str());
-	mTriggerTurnSpeed = (float)atof(sTriggerTurnPos.c_str());
+	mTriggerTurnTarget = atof(sTriggerTurnTarget);
+	mTriggerTurnSpeed = atof(sTriggerTurnPos);
 	
 	// temp 
 	/*mTriggerTurnSpeed = 0.001;
