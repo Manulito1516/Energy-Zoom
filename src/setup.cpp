@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 #include <iostream>
+#include <fstream>
 #include <vector>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
@@ -21,6 +22,7 @@ std::vector<ME_Texture*> g_textures;
 
 // Road
 float g_roadTurn = 0;
+ifstream Track;
 
 // ---------------------------------------------
 // functions
@@ -51,6 +53,8 @@ bool init(){
 
 				// Initialize PNG loading
 				IMG_Init(IMG_INIT_PNG & IMG_INIT_PNG);
+				
+				// open track
 
 			} else { success = false; }
 		} else { success = false; }
@@ -64,6 +68,8 @@ bool init(){
 }
 
 void close(){
+	Track.close();
+	
 	// close font (ME_Texture)
 	g_manusFont.free();
 	
@@ -86,8 +92,17 @@ void close(){
 bool loadAssets(){
 	bool success = true;
 	g_manusFont.load("assets/manus.png", 128, 64);
+	reloadTrack();
 	
 	return success;
+}
+
+void reloadTrack(){
+	if (Track.is_open()){
+		Track.close();
+	}
+	
+	Track.open("tracks/oval");
 }
 
 // function that convert degrees to radians

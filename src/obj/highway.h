@@ -15,7 +15,6 @@ public:
 	static const float HIGHWAY_VEL;
 
 	Highway();
-	~Highway();
 
 	void takeInput(SDL_Event &e);
 	void update();
@@ -27,7 +26,7 @@ public:
 	float get_posZ() const { return mPosZf; }
 	float get_vel() const { return mVel; }
 	float get_accel() const { return mAcceleration; }
-	float get_nextTrigger() const { return mTriggerNumber; }
+	int get_nextTrigger() const { return mTriggerNumber; }
 	int get_triggerPos() const { return mTriggerPos; }
 private:
 	int mPosX, mPosY;
@@ -44,7 +43,7 @@ private:
 	int mTriggerNumber, mTriggerPos, mTriggerLoopPos;
 	float mTriggerTurnSpeed, mTriggerTurnTarget;
 	
-	std::ifstream Track;
+	//std::ifstream Track;
 	
 	
 	// The scale and clip for the render function (drawing in the distance)

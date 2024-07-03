@@ -37,10 +37,10 @@ Highway::Highway(){
 	mTriggerPos = 0;
 	mTriggerTurnTarget = 0.0;
 	mTriggerTurnSpeed = 0.0;
-	mTriggerLoopPos = 800;
+	mTriggerLoopPos = 99999;
 	
-	ifstream Track;
-	Track.open("tracks/oval");
+	//ifstream Track;
+	//Track.open("tracks/oval");
 
 	//Scale texture rect
 	mScale.x = 0;
@@ -72,11 +72,8 @@ Highway::Highway(){
 	mTexture.load(mTexturePath, HIGHWAY_TEX_W, HIGHWAY_TEX_H);
 	g_textures.push_back(&mTexture); // add to the end of the vector/array
 	
+	Track.seekg(0, ifstream::beg);
 	loadTrigger();
-}
-
-Highway::~Highway(){
-	Track.close();
 }
 
 void Highway::takeInput(SDL_Event &e){
@@ -139,6 +136,10 @@ void Highway::update(){
 
 void Highway::readRoad(){
 	if (mPosZf > mTriggerPos){ // after trigger position
+		if (mTriggerPos == 0){
+			Track.seekg(0, ifstream::beg);
+			loadTrigger();
+		}
 		
 		// first check positivity, then if it's not enough...
 		if (mTriggerTurnTarget >= 0 && g_roadTurn < mTriggerTurnTarget) {
@@ -157,32 +158,33 @@ void Highway::readRoad(){
 		}
 		
 		// same case just after :)
-		if (mTriggerTurnTarget > 0 && g_roadTurn > mTriggerTurnTarget) {
+		if (mTriggerTurnTarget > 0 && g_roadTurn > mTriggerTurnTarget
+		or mTriggerTurnTarget == 0 && g_roadTurn == 0 && mTriggerPos != 0
+		or mTriggerTurnTarget < 0 && g_roadTurn < mTriggerTurnTarget) {
 			mTriggerNumber++;
 			loadTrigger();
-		} else if (mTriggerTurnTarget < 0 && g_roadTurn < mTriggerTurnTarget) {
-			mTriggerNumber++;
-			loadTrigger();
-		}
+		} 
 	}
 	
 	if (mPosZf > mTriggerLoopPos){
 		// temp
-		mTriggerNumber = 0;
+		mTriggerNumber = 1;
 		mPosZf = 0;
-		
+
+		reloadTrack();
 		loadTrigger();
 	}
 }
 
 void Highway::loadTrigger(){
+	if (!Track.is_open()){
+		return;
+	}
+	
 	// make temp strings
 	string sTriggerPos;
 	string sTriggerTurnTarget;
 	string sTriggerTurnPos;
-	
-	// move the cursor to the trigger number
-	//Track.seekg(mTriggerNumber, ifstream::beg);
 	
 	// save the data from file Track to strings
 	getline(Track, sTriggerPos, ',');
@@ -194,15 +196,9 @@ void Highway::loadTrigger(){
 	mTriggerTurnTarget = (float)atof(sTriggerTurnTarget.c_str());
 	mTriggerTurnSpeed = (float)atof(sTriggerTurnPos.c_str());
 	
-	cout << "string: ";
-	cout << sTriggerPos;
-	
-	cout << "int: ";
-	cout << mTriggerPos;
-	// temp 
-	/*mTriggerTurnSpeed = 0.001;
-	mTriggerTurnTarget = 0;
-	mTriggerPos = 180; */
+	if (mTriggerPos == 0) {
+		mTriggerLoopPos = (int)mPosZf;
+	}
 }
 
 void Highway::render(){

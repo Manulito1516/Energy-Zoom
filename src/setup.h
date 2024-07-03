@@ -6,9 +6,12 @@
 #include <SDL2/SDL_image.h>
 
 #include <string>
-#include <sstream>
+//#include <sstream>
+#include <fstream>
+#include <iostream>
 #include <stdio.h>
 #include <vector>
+using namespace std;
 
 
 // SCREEN SIZE
@@ -27,7 +30,7 @@ extern bool g_fullscreen;
 extern bool g_soft_render;
 
 // global texture list and font
-extern std::vector<ME_Texture*> g_textures;
+extern vector<ME_Texture*> g_textures;
 
 const int g_fontSize = 10;
 const int g_fontSpacing = 8;
@@ -35,6 +38,7 @@ extern ME_Texture g_manusFont;
 
 // Road globals
 extern float g_roadTurn;
+extern ifstream Track;
 
 //-----------------------
 // functions
@@ -44,5 +48,6 @@ extern bool init();
 extern void close();
 extern bool loadAssets();
 extern float degToRad(float degrees);
+extern void reloadTrack();
 
 #endif
