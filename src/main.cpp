@@ -73,12 +73,13 @@ int main(int argc, char* args[]){
 				
 				// FPS COUNTER
 				timeText = "FPS: " + std::to_string(avgFPS);
-				std::string debugTexts[5] = {
+				std::string debugTexts[6] = {
 					"highway.mPosZ: " + std::to_string(o_highway.get_posZ()),
 					"highway.mVel: " + std::to_string(o_highway.get_vel()),
 					"highway.mAccel: " + std::to_string(o_highway.get_accel()),
 					"g_roadTurn: " + std::to_string(g_roadTurn),
-					"mNextTrigger: " + std::to_string(o_highway.get_nextTrigger())
+					"mNextTrigger: " + std::to_string(o_highway.get_nextTrigger()),
+					"mTriggerPos: " + std::to_string(o_highway.get_triggerPos())
 				};
 				
 				/*
@@ -100,7 +101,7 @@ int main(int argc, char* args[]){
 				
 				g_manusFont.renderText(0,0, timeText);
 				
-				for (int i = 0; i < 5; i++){
+				for (int i = 0; i < 6; i++){
 					g_manusFont.renderText(0, 12 + i * 12, debugTexts[i]);
 				}
 				

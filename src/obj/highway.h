@@ -28,6 +28,7 @@ public:
 	float get_vel() const { return mVel; }
 	float get_accel() const { return mAcceleration; }
 	float get_nextTrigger() const { return mTriggerNumber; }
+	int get_triggerPos() const { return mTriggerPos; }
 private:
 	int mPosX, mPosY;
 	int mStartPosY;

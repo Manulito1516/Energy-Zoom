@@ -10,6 +10,7 @@
 
 #include "../setup.h"
 #include "../ME/ME_Texture.h"
+using namespace std;
 
 // arreglen los header carajo
 const float Highway::HIGHWAY_VEL = 0.01;
@@ -20,20 +21,25 @@ Highway::Highway(){
 	
 	mStartPosY = SCREEN_HEIGHT * (1.00/3.00);
 
+	// Positions and velocity
 	mPosZf = 0.0;
 	mVel = 0.0;
 	mAcceleration = 0.0;
 	mVelXf = 0;
 	mTurnVel = 0;
+	
+	// Controls
+	mThrottle = 0.0;
+	mBrake = 0.0;
 
 	// Read road
-	mTriggerNumber = 0;
-	mTriggerPos = 100;
-	mTriggerTurnTarget = 0.5;
-	mTriggerTurnSpeed = 0.002;
-	mTriggerLoopPos = 500;
+	mTriggerNumber = 1;
+	mTriggerPos = 0;
+	mTriggerTurnTarget = 0.0;
+	mTriggerTurnSpeed = 0.0;
+	mTriggerLoopPos = 800;
 	
-	std::ifstream Track;
+	ifstream Track;
 	Track.open("tracks/oval");
 
 	//Scale texture rect
@@ -65,6 +71,8 @@ Highway::Highway(){
 	mTexturePath = "assets/sprites/highway.png";
 	mTexture.load(mTexturePath, HIGHWAY_TEX_W, HIGHWAY_TEX_H);
 	g_textures.push_back(&mTexture); // add to the end of the vector/array
+	
+	loadTrigger();
 }
 
 Highway::~Highway(){
@@ -169,23 +177,28 @@ void Highway::readRoad(){
 
 void Highway::loadTrigger(){
 	// make temp strings
-	std::string sTriggerPos;
-	std::string sTriggerTurnTarget;
-	std::string sTriggerTurnPos;
+	string sTriggerPos;
+	string sTriggerTurnTarget;
+	string sTriggerTurnPos;
 	
 	// move the cursor to the trigger number
-	Track.seekg(mTriggerNumber, std::ifstream::beg);
+	//Track.seekg(mTriggerNumber, ifstream::beg);
 	
 	// save the data from file Track to strings
-	std::getline(Track, sTriggerPos, ',');
-	std::getline(Track, sTriggerTurnTarget, ',');
-	std::getline(Track, sTriggerTurnPos, ';');
+	getline(Track, sTriggerPos, ',');
+	getline(Track, sTriggerTurnTarget, ',');
+	getline(Track, sTriggerTurnPos, ';');
 	
 	// string to int, string to double (float)
 	mTriggerPos = atoi(sTriggerPos.c_str());
 	mTriggerTurnTarget = (float)atof(sTriggerTurnTarget.c_str());
 	mTriggerTurnSpeed = (float)atof(sTriggerTurnPos.c_str());
 	
+	cout << "string: ";
+	cout << sTriggerPos;
+	
+	cout << "int: ";
+	cout << mTriggerPos;
 	// temp 
 	/*mTriggerTurnSpeed = 0.001;
 	mTriggerTurnTarget = 0;
