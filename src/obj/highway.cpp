@@ -14,6 +14,7 @@ using namespace std;
 
 // arreglen los header carajo
 const float Highway::HIGHWAY_VEL = 0.01;
+const float Highway::HIGHWAY_MAX_VEL = 0.85;
 
 Highway::Highway(){	
 	mPosX = SCREEN_WIDTH / 2; // Centro
@@ -105,11 +106,11 @@ void Highway::takeInput(SDL_Event &e){
 
 void Highway::update(){
 	//Move the Highway left or right
-	mRoadX += mVelXf;
+	mRoadX += mVelXf * (mVel/HIGHWAY_MAX_VEL);
 	g_roadTurn += mTurnVel;
 	
 	// Acceleration and Z axis things
-	if (mVel < 0.85){
+	if (mVel < HIGHWAY_MAX_VEL){
 		mAcceleration = mThrottle / 2; // THIS IS TEMPORARY, MAKE RPM SHIT LATER
 		mVel += mAcceleration;
 	}

@@ -13,6 +13,7 @@ public:
 	static const int HIGHWAY_TEX_W = 16;
 	static const int HIGHWAY_TEX_H = 8;
 	static const float HIGHWAY_VEL;
+	static const float HIGHWAY_MAX_VEL;
 
 	Highway();
 

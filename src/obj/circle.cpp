@@ -41,10 +41,10 @@ void Circle::takeInput(SDL_Event& e){
         //Adjust the velocity
         switch( e.key.keysym.sym )
         {
-            case SDLK_UP: mSpeedY -= CIRCLE_SPEED; break;
-            case SDLK_DOWN: mSpeedY += CIRCLE_SPEED; break;
-            case SDLK_LEFT: mSpeedX -= CIRCLE_SPEED; break;
-            case SDLK_RIGHT: mSpeedX += CIRCLE_SPEED; break;
+            case SDLK_w: mSpeedY -= CIRCLE_SPEED; break;
+            case SDLK_s: mSpeedY += CIRCLE_SPEED; break;
+            case SDLK_a: mSpeedX -= CIRCLE_SPEED; break;
+            case SDLK_d: mSpeedX += CIRCLE_SPEED; break;
         }
     }
     //If a key was released
@@ -53,10 +53,10 @@ void Circle::takeInput(SDL_Event& e){
         //Adjust the velocity
         switch( e.key.keysym.sym )
         {
-            case SDLK_UP: mSpeedY += CIRCLE_SPEED; break;
-            case SDLK_DOWN: mSpeedY -= CIRCLE_SPEED; break;
-            case SDLK_LEFT: mSpeedX += CIRCLE_SPEED; break;
-            case SDLK_RIGHT: mSpeedX -= CIRCLE_SPEED; break;
+            case SDLK_w: mSpeedY += CIRCLE_SPEED; break;
+            case SDLK_s: mSpeedY -= CIRCLE_SPEED; break;
+            case SDLK_a: mSpeedX += CIRCLE_SPEED; break;
+            case SDLK_d: mSpeedX -= CIRCLE_SPEED; break;
         }
     }
 }

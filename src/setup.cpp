@@ -100,6 +100,8 @@ bool loadAssets(){
 void reloadTrack(){
 	if (Track.is_open()){
 		Track.close();
+		//Track.clear();
+		//Track.seekg(0);
 	}
 	
 	Track.open("tracks/oval");
