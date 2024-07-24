@@ -12,6 +12,11 @@ Car::Car(){
 	mVelX = 0;
 	mVelY = 0;
 	
+	mRect.x = mPosX;
+	mRect.y = mPosY;
+	mRect.w = CAR_WIDTH;
+	mRect.h = CAR_HEIGHT;
+	
 	mTexturePath = "assets/sprites/car.png";
 	mTexture.load(mTexturePath, CAR_WIDTH, CAR_HEIGHT);
 	g_textures.push_back(&mTexture); // add to the end of the vector/array
@@ -43,6 +48,9 @@ void Car::update(){
 		//Move back
 		mPosX -= mVelX;
 	}
+	
+	mRect.x = mPosX;
+	mRect.y = mPosY;
 }
 
 void Car::render(){

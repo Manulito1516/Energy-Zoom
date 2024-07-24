@@ -1,5 +1,5 @@
 #include "setup.h"
-//#include "obj/circle.h"
+#include "obj/circle.h"
 #include "obj/car.h"
 #include "obj/highway.h"
 //#include "obj/object.h"
@@ -13,7 +13,7 @@ int main(int argc, char* args[]){
 			SDL_Event event;
 			
 			// *** INITIALIZE OBJECTS ***
-			//Circle circle;
+			Circle o_circle;
 			Highway o_highway;
 			Car o_car;
 			//Obj_base obj;
@@ -54,7 +54,7 @@ int main(int argc, char* args[]){
 							}
 						}
 					}
-					//circle.takeInput(event);
+					o_circle.takeInput(event);
 					o_highway.takeInput(event);
 				}
 				
@@ -64,8 +64,11 @@ int main(int argc, char* args[]){
 					avgFPS = 0;
 				}
 				
+				// *** CHECK COLLISIONS ***
+				bool testCollision = checkCollision(o_circle.get_rect(), o_car.get_rect());
+				
 				// *** UPDATE OBJECTS ***
-				//circle.update();
+				o_circle.update();
 				o_highway.update();
 				o_highway.readRoad();
 				//o_car.update();
@@ -73,43 +76,32 @@ int main(int argc, char* args[]){
 				
 				// FPS COUNTER
 				timeText = "FPS: " + std::to_string(avgFPS);
-				std::string debugTexts[6] = {
+				int numbar = 7;
+				std::string debugTexts[numbar] = {
 					"highway.mPosZ: " + std::to_string(o_highway.get_posZ()),
 					"highway.mVel: " + std::to_string(o_highway.get_vel()),
 					"highway.mAccel: " + std::to_string(o_highway.get_accel()),
 					"g_roadTurn: " + std::to_string(g_roadTurn),
 					"mNextTrigger: " + std::to_string(o_highway.get_nextTrigger()),
-					"mTriggerPos: " + std::to_string(o_highway.get_triggerPos())
+					"mTriggerPos: " + std::to_string(o_highway.get_triggerPos()),
+					"collision: " + std::to_string(testCollision)
 				};
-				
-				/*
-				std::string debugText = "highway.mPosZ: " + std::to_string(o_highway.get_posZ());
-				std::string debugText2 = "highway.mVel: " + std::to_string(o_highway.get_vel());
-				std::string debugText3 = "highway.mAccel: " + std::to_string(o_highway.get_accel());
-				std::string debugText4 = "g_roadTurn: " + std::to_string(g_roadTurn);
-				std::string debugText5 = "mNextTrigger: " + std::to_string(o_highway.get_nextTrigger);*/
 				
 				// clear screen
 				SDL_SetRenderDrawColor(g_renderer, 0x00, 0x00, 0x00, 0xFF);
 				SDL_RenderClear(g_renderer);
 				
 				// *** RENDER OBJECTS ***
-				//circle.render();
 				o_highway.render();
 				o_car.render();
+				o_circle.render();
 				//obj.render();
 				
 				g_manusFont.renderText(0,0, timeText);
 				
-				for (int i = 0; i < 6; i++){
+				for (int i = 0; i < numbar; i++){
 					g_manusFont.renderText(0, 12 + i * 12, debugTexts[i]);
 				}
-				
-				/*
-				g_manusFont.renderText(0,12, debugText);
-				g_manusFont.renderText(0,24, debugText2);
-				g_manusFont.renderText(0,36, debugText3);
-				g_manusFont.renderText(0,48, debugText4);*/
 				
 				// update screen
 				SDL_RenderPresent(g_renderer);

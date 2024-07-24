@@ -17,6 +17,12 @@ Circle::Circle(){
 	mScale.y = mY;
 	mScale.w = 32;
 	mScale.h = 32;
+	
+	mRect.x = mX;
+	mRect.y = mY;
+	mRect.w = 32;
+	mRect.h = 32;
+	
 	mSpeedX = 0;
 	mSpeedY = 0;
 
@@ -32,6 +38,9 @@ void Circle::render(){
 void Circle::update(){
 	mX += mSpeedX;
 	mY += mSpeedY;
+	
+	mRect.x = mX;
+	mRect.y = mY;
 }
 
 void Circle::takeInput(SDL_Event& e){

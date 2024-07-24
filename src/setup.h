@@ -49,5 +49,6 @@ extern void close();
 extern bool loadAssets();
 extern float degToRad(float degrees);
 extern void reloadTrack();
+extern bool checkCollision(SDL_Rect RectA, SDL_Rect RectB);
 
 #endif

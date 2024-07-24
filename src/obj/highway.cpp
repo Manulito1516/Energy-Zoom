@@ -111,7 +111,7 @@ void Highway::update(){
 	
 	// Acceleration and Z axis things
 	if (mVel < HIGHWAY_MAX_VEL){
-		mAcceleration = mThrottle / 2; // THIS IS TEMPORARY, MAKE RPM SHIT LATER
+		mAcceleration = mThrottle / 2; // is this temporary?
 		mVel += mAcceleration;
 	}
 	

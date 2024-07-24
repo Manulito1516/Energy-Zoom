@@ -29,6 +29,7 @@ public:
 	float get_accel() const { return mAcceleration; }
 	int get_nextTrigger() const { return mTriggerNumber; }
 	int get_triggerPos() const { return mTriggerPos; }
+	
 private:
 	int mPosX, mPosY;
 	int mStartPosY;

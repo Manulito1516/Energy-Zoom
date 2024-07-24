@@ -15,11 +15,15 @@ class Circle{
 	void takeInput(SDL_Event &e);
     void update();
     void render();
+    
+    SDL_Rect get_rect() const { return mRect; }
 
   private:
     int mX, mY, mSpeedX, mSpeedY;
     int mWidth, mHeight;
     SDL_Rect mScale;
+    SDL_Rect mRect;
+    
     std::string mTexturePath;
     ME_Texture mTexture;
 };

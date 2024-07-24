@@ -111,3 +111,19 @@ void reloadTrack(){
 float degToRad(float degrees){
 	return degrees * (M_PI / 180);
 }
+
+// collision detection
+bool checkCollision(SDL_Rect RectA, SDL_Rect RectB){
+	
+	int RectA_x2 = RectA.x + RectA.w;
+	int RectB_x2 = RectB.x + RectB.w;
+	int RectA_y2 = RectA.y + RectA.h;
+	int RectB_y2 = RectB.y + RectB.h;
+	
+	if (RectA.x < RectB_x2 && RectA_x2 > RectB.x
+	&& RectA.y < RectB_y2 && RectA_y2 > RectB.x){
+		return true;
+	} else {
+		return false;
+	}
+}
