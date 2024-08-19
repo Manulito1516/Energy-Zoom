@@ -38,6 +38,7 @@ extern ME_Texture g_manusFont;
 
 // Road globals
 extern float g_roadTurn;
+extern bool g_onRoad;
 extern ifstream Track;
 
 //-----------------------

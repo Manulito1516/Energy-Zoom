@@ -65,7 +65,7 @@ int main(int argc, char* args[]){
 				}
 				
 				// *** CHECK COLLISIONS ***
-				bool testCollision = checkCollision(o_highway.get_rect(), o_car.get_rect());
+				g_onRoad = checkCollision(o_highway.get_rect(), o_car.get_rect());
 				
 				// *** UPDATE OBJECTS ***
 				o_circle.update();
@@ -84,7 +84,7 @@ int main(int argc, char* args[]){
 					"g_roadTurn: " + std::to_string(g_roadTurn),
 					"mNextTrigger: " + std::to_string(o_highway.get_nextTrigger()),
 					"mTriggerPos: " + std::to_string(o_highway.get_triggerPos()),
-					"collision: " + std::to_string(testCollision),
+					"collision: " + std::to_string(g_onRoad),
 					"mHitbox.x: " + std::to_string(o_highway.get_rect().x)
 				};
 				

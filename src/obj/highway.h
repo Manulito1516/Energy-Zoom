@@ -37,7 +37,7 @@ private:
 	
 	// More resolution i guess
 	float mPosXf, mVelXf, mPosZf, mWidthf, mClipYf;
-	float mTurnVel, mVel, mAcceleration;
+	float mTurnVel, mVel, mAcceleration, mMaxVelocity;
 	
 	// controls of the car
 	float mThrottle, mBrake;

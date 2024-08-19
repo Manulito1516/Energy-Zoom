@@ -28,6 +28,7 @@ Highway::Highway(){
 	mAcceleration = 0.0;
 	mVelXf = 0;
 	mTurnVel = 0;
+	mMaxVelocity = HIGHWAY_MAX_VEL;
 	
 	// Controls
 	mThrottle = 0.0;
@@ -113,7 +114,7 @@ void Highway::update(){
 	g_roadTurn += mTurnVel;
 	
 	// Acceleration and Z axis things
-	if (mVel < HIGHWAY_MAX_VEL){
+	if (mVel < mMaxVelocity){
 		mAcceleration = mThrottle / 2; // is this temporary?
 		mVel += mAcceleration;
 	}
@@ -139,6 +140,17 @@ void Highway::update(){
 	
 	// Hitbox
 	mHitbox.x = (mRoadX + 24) *9;//- SCREEN_WIDTH / 2;
+	
+	// *** COLLISIONS ***
+	// road
+	if (g_onRoad){
+		//on road
+		mMaxVelocity = HIGHWAY_MAX_VEL; 
+	} else {
+		//out of the road
+		//mVel -= HIGHWAY_VEL * 4;
+		mMaxVelocity = HIGHWAY_MAX_VEL / 4;
+	}
 }
 
 void Highway::readRoad(){
@@ -165,9 +177,9 @@ void Highway::readRoad(){
 		}
 		
 		// same case just after :)
-		if (mTriggerTurnTarget > 0 && g_roadTurn > mTriggerTurnTarget
-		or mTriggerTurnTarget == 0 && g_roadTurn == 0 && mTriggerPos != 0
-		or mTriggerTurnTarget < 0 && g_roadTurn < mTriggerTurnTarget) {
+		if ((mTriggerTurnTarget > 0 && g_roadTurn > mTriggerTurnTarget)
+		or (mTriggerTurnTarget == 0 && g_roadTurn == 0 && mTriggerPos != 0)
+		or (mTriggerTurnTarget < 0 && g_roadTurn < mTriggerTurnTarget)) {
 			mTriggerNumber++;
 			loadTrigger();
 		} 
