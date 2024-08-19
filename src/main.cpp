@@ -65,7 +65,7 @@ int main(int argc, char* args[]){
 				}
 				
 				// *** CHECK COLLISIONS ***
-				bool testCollision = checkCollision(o_circle.get_rect(), o_car.get_rect());
+				bool testCollision = checkCollision(o_highway.get_rect(), o_car.get_rect());
 				
 				// *** UPDATE OBJECTS ***
 				o_circle.update();
@@ -76,7 +76,7 @@ int main(int argc, char* args[]){
 				
 				// FPS COUNTER
 				timeText = "FPS: " + std::to_string(avgFPS);
-				int numbar = 7;
+				int numbar = 8;
 				std::string debugTexts[numbar] = {
 					"highway.mPosZ: " + std::to_string(o_highway.get_posZ()),
 					"highway.mVel: " + std::to_string(o_highway.get_vel()),
@@ -84,7 +84,8 @@ int main(int argc, char* args[]){
 					"g_roadTurn: " + std::to_string(g_roadTurn),
 					"mNextTrigger: " + std::to_string(o_highway.get_nextTrigger()),
 					"mTriggerPos: " + std::to_string(o_highway.get_triggerPos()),
-					"collision: " + std::to_string(testCollision)
+					"collision: " + std::to_string(testCollision),
+					"mHitbox.x: " + std::to_string(o_highway.get_rect().x)
 				};
 				
 				// clear screen

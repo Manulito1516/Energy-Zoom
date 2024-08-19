@@ -40,8 +40,11 @@ Highway::Highway(){
 	mTriggerTurnSpeed = 0.0;
 	mTriggerLoopPos = 99999;
 	
-	//ifstream Track;
-	//Track.open("tracks/oval");
+	// Hitbox
+	mHitbox.x = 0;
+	mHitbox.y = SCREEN_HEIGHT * (2.00/3.00);
+	mHitbox.w = SCREEN_WIDTH;
+	mHitbox.h = 32;
 
 	//Scale texture rect
 	mScale.x = 0;
@@ -133,6 +136,9 @@ void Highway::update(){
 	
 	// Moves the car out if it goes straight during a turn
 	mRoadX += g_roadTurn * mVel * 2; // higher number means lower grip
+	
+	// Hitbox
+	mHitbox.x = (mRoadX + 24) *9;//- SCREEN_WIDTH / 2;
 }
 
 void Highway::readRoad(){

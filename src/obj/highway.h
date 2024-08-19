@@ -29,6 +29,7 @@ public:
 	float get_accel() const { return mAcceleration; }
 	int get_nextTrigger() const { return mTriggerNumber; }
 	int get_triggerPos() const { return mTriggerPos; }
+	SDL_Rect get_rect() const { return mHitbox; }
 	
 private:
 	int mPosX, mPosY;
@@ -51,6 +52,9 @@ private:
 	// The scale and clip for the render function (drawing in the distance)
 	SDL_Rect mScale;
 	SDL_Rect mClip;
+	
+	// la caja misteriosa [?]
+	SDL_Rect mHitbox;
 	
 	int mWait, mCloseness; // texturizing
 	float mRoadX, mRoadAngle; // perspective of position and turn
