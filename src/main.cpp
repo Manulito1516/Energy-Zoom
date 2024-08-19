@@ -2,6 +2,7 @@
 #include "obj/circle.h"
 #include "obj/car.h"
 #include "obj/highway.h"
+#include "obj/bg.h"
 //#include "obj/object.h"
 #include "ME/ME_Timer.h"
 
@@ -16,6 +17,7 @@ int main(int argc, char* args[]){
 			Circle o_circle;
 			Highway o_highway;
 			Car o_car;
+			BG o_bg;
 			//Obj_base obj;
 			
 			//SDL_Color textColor = {255, 255, 255, 255};
@@ -93,6 +95,9 @@ int main(int argc, char* args[]){
 				SDL_RenderClear(g_renderer);
 				
 				// *** RENDER OBJECTS ***
+				// render background
+				o_bg.render();
+				// objects
 				o_highway.render();
 				o_car.render();
 				o_circle.render();
