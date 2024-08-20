@@ -1,10 +1,11 @@
 #include "highway.h"
 
-#include <iostream>
-#include <fstream>
+//#include <iostream>
+//#include <fstream>
 #include <cmath>
-#include <stdio.h>
-#include <stdlib.h>
+//#include <stdio.h>
+//#include <stdlib.h>
+#include <iosfwd>
 #include <vector>
 #include <string.h>
 

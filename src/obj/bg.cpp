@@ -1,7 +1,8 @@
 #include "bg.h"
 
 #include <SDL2/SDL.h>
-#include <stdio.h>
+//#include <stdio.h>
+#include <iosfwd>
 #include <string.h>
 #include <vector>
 

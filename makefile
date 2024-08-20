@@ -14,5 +14,8 @@ OUTPUT = EZ
 all : $(SRC)
 	$(COMPILER) $(SRC) $(COMPILER_FLAGS) $(LINKER_FLAGS) -o build/$(OUTPUT)
 
+cache : $(SRC)
+	ccache $(COMPILER) $(SRC) $(COMPILER_FLAGS) $(LINKER_FLAGS) -o build/$(OUTPUT)
+
 fault : $(SRC)
 	$(COMPILER) $(SRC) $(COMPILER_FLAGS) $(LINKER_FLAGS) -o build/$(OUTPUT) -g

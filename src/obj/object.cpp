@@ -2,7 +2,8 @@
 
 #include <SDL2/SDL.h>
 #include <string.h>
-#include <stdio.h>
+//#include <stdio.h>
+#include <iosfwd>
 #include <vector>
 
 #include "../setup.h"

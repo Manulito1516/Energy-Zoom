@@ -1,8 +1,8 @@
 #include "setup.h"
 
 #include <stdio.h>
-#include <iostream>
-#include <fstream>
+#include <iosfwd>
+//#include <fstream>
 #include <vector>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
