@@ -90,7 +90,7 @@ void Highway::takeInput(SDL_Event &e){
 			case SDLK_LEFT: mVelXf += 0.5; break;
 			case SDLK_RIGHT: mVelXf -= 0.5; break;
 			case SDLK_UP: mThrottle += HIGHWAY_VEL; break;
-			case SDLK_DOWN: mBrake += HIGHWAY_VEL * 100; break;
+			case SDLK_DOWN: mBrake += HIGHWAY_VEL * 150; break;
 			//case SDLK_a: mTurnVel = -HIGHWAY_VEL; break;
 			//case SDLK_d: mTurnVel = HIGHWAY_VEL; break;
 		}
@@ -102,7 +102,7 @@ void Highway::takeInput(SDL_Event &e){
 			case SDLK_LEFT: mVelXf -= 0.5; break;
 			case SDLK_RIGHT: mVelXf += 0.5; break;
 			case SDLK_UP: mThrottle -= HIGHWAY_VEL; break;
-			case SDLK_DOWN: mBrake -= HIGHWAY_VEL * 100; break;
+			case SDLK_DOWN: mBrake -= HIGHWAY_VEL * 150; break;
 			//case SDLK_a: mTurnVel = 0; break;
 			//case SDLK_d: mTurnVel = 0; break;
 		}
@@ -137,7 +137,7 @@ void Highway::update(){
 	mPosZf += mVel; // controls the position on circuit
 	
 	// Moves the car out if it goes straight during a turn
-	mRoadX += g_roadTurn * mVel * 2; // higher number means lower grip
+	mRoadX += g_roadTurn * (mVel + mThrottle * 50) * 1.6; // higher number means lower grip
 	
 	// Hitbox
 	mHitbox.x = (mRoadX + 24) *9;//- SCREEN_WIDTH / 2;

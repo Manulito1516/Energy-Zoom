@@ -11,3 +11,7 @@
 - [ ] Menu
 - [ ] Timer for Time-Attack
 - [ ] Lap counter
+- [ ] Speedometer
+- [ ] Gears?
+- [ ] Different surfaces for the road on the same track
+

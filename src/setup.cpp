@@ -105,7 +105,7 @@ void reloadTrack(){
 		//Track.seekg(0);
 	}
 	
-	Track.open("tracks/oval");
+	Track.open("tracks/track1");
 }
 
 // function that convert degrees to radians
