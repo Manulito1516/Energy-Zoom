@@ -60,7 +60,7 @@ int main(int argc, char* args[]){
 					}
 					o_circle.takeInput(event);
 					o_highway.takeInput(event);
-					//o_grass.takeInput(event);
+					o_car.takeInput(event);
 				}
 				
 				//Calculate and correct fps
@@ -70,14 +70,13 @@ int main(int argc, char* args[]){
 				}
 				
 				// *** CHECK COLLISIONS ***
-				g_onRoad = checkCollision(o_highway.get_rect(), o_car.get_rect());
+				g_onRoad = checkCollision(o_highway.get_hitbox(), o_car.get_hitbox());
 				
 				// *** UPDATE OBJECTS ***
 				o_circle.update();
 				o_highway.update();
 				o_highway.readRoad();
-				//o_grass.update();
-				//o_car.update();
+				o_car.update();
 				//obj.update();
 				
 				// FPS COUNTER
@@ -90,8 +89,8 @@ int main(int argc, char* args[]){
 					"g_roadTurn: " + std::to_string(g_roadTurn),
 					"mNextTrigger: " + std::to_string(o_highway.get_nextTrigger()),
 					"mTriggerPos: " + std::to_string(o_highway.get_triggerPos()),
-					"collision: " + std::to_string(g_onRoad),
-					"mHitbox.x: " + std::to_string(o_highway.get_rect().x),
+					"onRoad: " + std::to_string(g_onRoad),
+					"cardir: " + std::to_string(o_car.get_dir()),
 					"mRoadX " + std::to_string(o_highway.get_roadX())
 				};
 				

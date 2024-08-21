@@ -25,6 +25,7 @@ public:
 	void loadTrigger();
 	
 	float get_clipYf() const { return mClipYf; }
+	SDL_Rect get_hitbox() const { return mHitbox; }
 	
 	// debug
 	float get_posZ() const { return mPosZf; }
@@ -33,7 +34,7 @@ public:
 	int get_nextTrigger() const { return mTriggerNumber; }
 	int get_triggerPos() const { return mTriggerPos; }
 	int get_roadX() const { return mRoadX; }
-	SDL_Rect get_rect() const { return mHitbox; }
+	
 	
 private:
 	int mPosX, mPosY;

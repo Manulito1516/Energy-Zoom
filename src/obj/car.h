@@ -11,21 +11,25 @@ public:
 	static const int CAR_WIDTH = 32;
 	static const int CAR_HEIGHT = 32;
 
-	static const int CAR_VEL = 0;
-
 	Car();
 
 	void takeInput(SDL_Event &e);
 	void update();
 	void render();
 	
-	SDL_Rect get_rect() const { return mRect; }
+	SDL_Rect get_hitbox() const { return mHitbox; }
+	int get_dir() const { return mDir; }
 
 private:
 	int mPosX, mPosY;
-	int mVelX, mVelY;
+	int mDir, mDirDir;
+	bool mAccelerating;
 	
-	SDL_Rect mRect;
+	bool mFlip;
+	void setSprite(int a, int b, bool flip);
+	
+	SDL_Rect mHitbox, mClip;
+	
 	
 	std::string mTexturePath;
     ME_Texture mTexture;
