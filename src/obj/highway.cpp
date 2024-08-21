@@ -112,7 +112,9 @@ void Highway::takeInput(SDL_Event &e){
 void Highway::update(){
 	//Move the Highway left or right
 	mRoadX += mVelXf * (mVel/HIGHWAY_MAX_VEL);
-	g_roadTurn += mTurnVel;
+	if (mVel > 0) {
+		g_roadTurn += mTurnVel;
+	}
 	
 	// Acceleration and Z axis things
 	if (mVel < mMaxVelocity){
@@ -133,11 +135,13 @@ void Highway::update(){
 	}
 	
 	// Position (DON'T MODIFY DIRECTLY)
-	mClipYf += -mVel; // controls the texture side (note that this is negative)
+	mClipYf -= mVel; // controls the texture side (note that this is negative)
 	mPosZf += mVel; // controls the position on circuit
 	
 	// Moves the car out if it goes straight during a turn
-	mRoadX += g_roadTurn * (mVel + mThrottle * 50) * 1.6; // higher number means lower grip
+	if (mVel > HIGHWAY_MAX_VEL / 4){
+		mRoadX += g_roadTurn * (mVel + mThrottle * 50) * 1.4; // higher number means lower grip
+	}
 	
 	// Hitbox
 	mHitbox.x = (mRoadX + 24) *9;//- SCREEN_WIDTH / 2;
@@ -172,6 +176,7 @@ void Highway::readRoad(){
 			mTurnVel = 0;
 		}
 		
+		// return to straight
 		if (mTriggerTurnTarget == 0 && g_roadTurn > -0.01 && g_roadTurn < 0.01) {
 			mTurnVel = 0;
 			g_roadTurn = 0;

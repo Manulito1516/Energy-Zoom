@@ -24,11 +24,15 @@ public:
 	
 	void loadTrigger();
 	
+	float get_clipYf() const { return mClipYf; }
+	
+	// debug
 	float get_posZ() const { return mPosZf; }
 	float get_vel() const { return mVel; }
 	float get_accel() const { return mAcceleration; }
 	int get_nextTrigger() const { return mTriggerNumber; }
 	int get_triggerPos() const { return mTriggerPos; }
+	int get_roadX() const { return mRoadX; }
 	SDL_Rect get_rect() const { return mHitbox; }
 	
 private:

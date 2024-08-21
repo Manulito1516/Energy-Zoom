@@ -3,6 +3,7 @@
 #include "obj/car.h"
 #include "obj/highway.h"
 #include "obj/bg.h"
+#include "obj/grass.h"
 //#include "obj/object.h"
 #include "ME/ME_Timer.h"
 
@@ -18,6 +19,7 @@ int main(int argc, char* args[]){
 			Highway o_highway;
 			Car o_car;
 			BG o_bg;
+			Grass o_grass;
 			//Obj_base obj;
 			
 			//SDL_Color textColor = {255, 255, 255, 255};
@@ -58,6 +60,7 @@ int main(int argc, char* args[]){
 					}
 					o_circle.takeInput(event);
 					o_highway.takeInput(event);
+					//o_grass.takeInput(event);
 				}
 				
 				//Calculate and correct fps
@@ -73,12 +76,13 @@ int main(int argc, char* args[]){
 				o_circle.update();
 				o_highway.update();
 				o_highway.readRoad();
+				//o_grass.update();
 				//o_car.update();
 				//obj.update();
 				
 				// FPS COUNTER
 				timeText = "FPS: " + std::to_string(avgFPS);
-				int numbar = 8;
+				int numbar = 9;
 				std::string debugTexts[numbar] = {
 					"highway.mPosZ: " + std::to_string(o_highway.get_posZ()),
 					"highway.mVel: " + std::to_string(o_highway.get_vel()),
@@ -87,7 +91,8 @@ int main(int argc, char* args[]){
 					"mNextTrigger: " + std::to_string(o_highway.get_nextTrigger()),
 					"mTriggerPos: " + std::to_string(o_highway.get_triggerPos()),
 					"collision: " + std::to_string(g_onRoad),
-					"mHitbox.x: " + std::to_string(o_highway.get_rect().x)
+					"mHitbox.x: " + std::to_string(o_highway.get_rect().x),
+					"mRoadX " + std::to_string(o_highway.get_roadX())
 				};
 				
 				// clear screen
@@ -98,6 +103,7 @@ int main(int argc, char* args[]){
 				// render background
 				o_bg.render();
 				// objects
+				o_grass.render(o_highway.get_clipYf());
 				o_highway.render();
 				o_car.render();
 				o_circle.render();
