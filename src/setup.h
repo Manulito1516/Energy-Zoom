@@ -37,9 +37,11 @@ const int g_fontSpacing = 8;
 extern ME_Texture g_manusFont;
 
 // Road globals
+extern float g_posZf;
 extern float g_roadTurn;
 extern bool g_onRoad;
 extern ifstream Track;
+
 
 //-----------------------
 // functions

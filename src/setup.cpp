@@ -21,6 +21,7 @@ ME_Texture g_manusFont;
 std::vector<ME_Texture*> g_textures;
 
 // Road
+float g_posZf = 0;
 float g_roadTurn = 0;
 bool g_onRoad = true;
 ifstream Track;

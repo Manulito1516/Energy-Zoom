@@ -83,7 +83,7 @@ int main(int argc, char* args[]){
 				timeText = "FPS: " + std::to_string(avgFPS);
 				int numbar = 9;
 				std::string debugTexts[numbar] = {
-					"highway.mPosZ: " + std::to_string(o_highway.get_posZ()),
+					"g_posZ: " + std::to_string(g_posZf),
 					"highway.mVel: " + std::to_string(o_highway.get_vel()),
 					"highway.mAccel: " + std::to_string(o_highway.get_accel()),
 					"g_roadTurn: " + std::to_string(g_roadTurn),

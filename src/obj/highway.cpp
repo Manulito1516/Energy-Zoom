@@ -24,7 +24,7 @@ Highway::Highway(){
 	mStartPosY = SCREEN_HEIGHT * (1.00/3.00);
 
 	// Positions and velocity
-	mPosZf = 0.0;
+	//g_posZf = 0.0;
 	mVel = 0.0;
 	mAcceleration = 0.0;
 	mVelXf = 0;
@@ -136,7 +136,7 @@ void Highway::update(){
 	
 	// Position (DON'T MODIFY DIRECTLY)
 	mClipYf -= mVel; // controls the texture side (note that this is negative)
-	mPosZf += mVel; // controls the position on circuit
+	g_posZf += mVel; // controls the position on circuit
 	
 	// Moves the car out if it goes straight during a turn
 	if (mVel > HIGHWAY_MAX_VEL / 4){
@@ -159,7 +159,7 @@ void Highway::update(){
 }
 
 void Highway::readRoad(){
-	if (mPosZf > mTriggerPos){ // after trigger position
+	if (g_posZf > mTriggerPos){ // after trigger position
 		if (mTriggerPos == 0){
 			Track.seekg(0, ifstream::beg);
 			loadTrigger();
@@ -191,10 +191,10 @@ void Highway::readRoad(){
 		} 
 	}
 	
-	if (mPosZf > mTriggerLoopPos){
+	if (g_posZf > mTriggerLoopPos){
 		// temp
 		mTriggerNumber = 1;
-		mPosZf = 0;
+		g_posZf = 0;
 
 		reloadTrack();
 		loadTrigger();
@@ -222,7 +222,7 @@ void Highway::loadTrigger(){
 	mTriggerTurnSpeed = (float)atof(sTriggerTurnPos.c_str());
 	
 	if (mTriggerPos == 0) {
-		mTriggerLoopPos = (int)mPosZf;
+		mTriggerLoopPos = (int)g_posZf;
 	}
 }
 

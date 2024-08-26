@@ -28,7 +28,6 @@ public:
 	SDL_Rect get_hitbox() const { return mHitbox; }
 	
 	// debug
-	float get_posZ() const { return mPosZf; }
 	float get_vel() const { return mVel; }
 	float get_accel() const { return mAcceleration; }
 	int get_nextTrigger() const { return mTriggerNumber; }
@@ -41,7 +40,7 @@ private:
 	int mStartPosY;
 	
 	// More resolution i guess
-	float mPosXf, mVelXf, mPosZf, mWidthf, mClipYf;
+	float mPosXf, mVelXf, mWidthf, mClipYf;
 	float mTurnVel, mVel, mAcceleration, mMaxVelocity;
 	
 	// controls of the car
