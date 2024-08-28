@@ -19,7 +19,8 @@ class Obj3D{
     void render();
 
   private:
-    int mX, mY, mZ, mYoffset;
+    int mX, mY, mYoffset;
+    float mZ, mScaleFactor;
     int mWidth, mHeight;
 	SDL_Rect mClip;
     SDL_Rect mScale;

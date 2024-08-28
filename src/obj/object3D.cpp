@@ -17,6 +17,7 @@ Obj3D::Obj3D(){
 	mY = 80;
 	mZ = 300; // position on track
 	mYoffset = 0;
+	mScaleFactor = 1;
 	
 	mScale.x = 0;
 	mScale.y = 0;
@@ -34,14 +35,13 @@ Obj3D::Obj3D(){
 }
 
 void Obj3D::render(){
-  int scaleFactor = 1;
-  // no checkeado, mZ no debe ser 0
-  scaleFactor = mZ / (mZ + abs(mZ - g_posZf)) // (mZ - g_posZf) = 0 cuando llega al trigger (no necesariamente a la altura del auto)
   
+  // no checkeado, mZ no debe ser 0
+  mScaleFactor = mZ / (mZ + abs(mZ - g_posZf)); // (mZ - g_posZf) = 0 cuando llega al trigger (no necesariamente a la altura del auto)
   
   // render
-  mScale.x = WIDTH * scaleFactor;
-  mScale.y = HEIGHT * scaleFactor;
+  mScale.x = WIDTH * mScaleFactor;
+  mScale.y = HEIGHT * mScaleFactor;
   mTexture.render(mX, mY + mYoffset, &mScale, &mClip);
 }
 

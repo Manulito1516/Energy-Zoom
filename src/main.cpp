@@ -4,6 +4,8 @@
 #include "obj/highway.h"
 #include "obj/bg.h"
 #include "obj/grass.h"
+#include "obj/object3D.h"
+
 //#include "obj/object.h"
 #include "ME/ME_Timer.h"
 
@@ -20,6 +22,7 @@ int main(int argc, char* args[]){
 			Car o_car;
 			BG o_bg;
 			Grass o_grass;
+			Obj3D o_obj3d;
 			//Obj_base obj;
 			
 			//SDL_Color textColor = {255, 255, 255, 255};
@@ -106,6 +109,7 @@ int main(int argc, char* args[]){
 				o_highway.render();
 				o_car.render();
 				o_circle.render();
+				o_obj3d.render();
 				//obj.render();
 				
 				g_manusFont.renderText(0,0, timeText);
