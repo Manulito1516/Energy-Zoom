@@ -4,9 +4,10 @@
  
  ## TO DO:
 - [x] Grass
-- [ ] Car animations
+- [x] Car animations
 - [ ] Clouds that move based on road turn
 - [ ] 2D Objects positioned in 3D
+- [ ] Creating and deleting objects not in use
 - [ ] Collisions for those objects
 - [ ] Menu
 - [ ] Timer for Time-Attack

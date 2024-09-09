@@ -84,7 +84,7 @@ int main(int argc, char* args[]){
 				
 				// FPS COUNTER
 				timeText = "FPS: " + std::to_string(avgFPS);
-				int numbar = 9;
+				int numbar = 10;
 				std::string debugTexts[numbar] = {
 					"g_posZ: " + std::to_string(g_posZf),
 					"highway.mVel: " + std::to_string(o_highway.get_vel()),
@@ -94,7 +94,8 @@ int main(int argc, char* args[]){
 					"mTriggerPos: " + std::to_string(o_highway.get_triggerPos()),
 					"onRoad: " + std::to_string(g_onRoad),
 					"cardir: " + std::to_string(o_car.get_dir()),
-					"mRoadX " + std::to_string(o_highway.get_roadX())
+					"mRoadX " + std::to_string(o_highway.get_roadX()),
+					"mScaleFactor " + std::to_string(o_obj3d.get_scaleFactor())
 				};
 				
 				// clear screen

@@ -17,6 +17,8 @@ class Obj3D{
 	//void takeInput(SDL_Event &e);
     void update();
     void render();
+    
+    float get_scaleFactor() const { return mScaleFactor; }
 
   private:
     int mX, mY, mYoffset;
