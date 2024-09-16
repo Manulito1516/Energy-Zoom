@@ -21,7 +21,7 @@ Highway::Highway(){
 	mPosX = SCREEN_WIDTH / 2; // Centro
 	mPosY = SCREEN_HEIGHT / 2; // de la mitad para abajo
 	
-	mStartPosY = SCREEN_HEIGHT * (1.00/3.00);
+	mStartPosY = SCREEN_HEIGHT / 3;
 
 	// Positions and velocity
 	//g_posZf = 0.0;

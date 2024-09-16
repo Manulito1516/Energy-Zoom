@@ -13,10 +13,12 @@
 
 // constructor
 Obj3D::Obj3D(){
-	mX = SCREEN_WIDTH / 2 + 128;
-	mY = HORIZON;
+	mX = 200;
+	mY = 0;
 	mZ = 300; // position on track
-	mYoffset = 0;
+	
+	mXRender = 0; // used by render function, do not the mXRender
+	mYRender = HORIZON; // used by render function, do not the mYRender
 	mScaleFactor = 1;
 	
 	mScale.x = 0;
@@ -35,21 +37,25 @@ Obj3D::Obj3D(){
 }
 
 void Obj3D::render(){
+	if (g_posZf >= mZ){
+		return;
+	}
 	//mZ no debe ser 0
-	mScaleFactor = mZ / (mZ + abs(mZ - g_posZf) * 30); // (mZ - g_posZf) = 0 cuando llega al trigger (no necesariamente a la altura del auto)
-	// unfinished
-	mY = SCREEN_HEIGHT * mScaleFactor;
+	mScaleFactor = mZ / (mZ + abs(mZ - g_posZf) * 40); // (mZ - g_posZf) = 0 cuando llega al trigger (no necesariamente a la altura del auto)
+	if (mScaleFactor < 0.02 || mScaleFactor > 1){
+		return;
+	}
+	
+	// Testing
+	mYRender = HORIZON - 5 + (SCREEN_HEIGHT - HORIZON) * mScaleFactor;
+	mXRender = mX + (SCREEN_WIDTH - mX)* mScaleFactor;
 
 	
 	// render
 	mScale.w = 1 + WIDTH * mScaleFactor;
 	mScale.h = 1 + HEIGHT * mScaleFactor;
-	if (mScaleFactor > 0.1){
-		mTexture.render(mX, mY + mYoffset, &mScale, &mClip);
-	}
-	/*if (mScaleFactor == 1){
-		//delete
-	}*/
+	
+	mTexture.render(mXRender, mYRender + mY, &mScale, &mClip);
 }
 
 void Obj3D::update(){

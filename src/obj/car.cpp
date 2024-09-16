@@ -7,7 +7,7 @@
 
 Car::Car(){
 	mPosX = SCREEN_WIDTH / 2 - CAR_WIDTH / 2;
-	mPosY = SCREEN_HEIGHT * (2.00/3.00);
+	mPosY = SCREEN_HEIGHT * (2.00/3.00); // 160
 
 	mDir = 0;
 	mDirDir = 0;
