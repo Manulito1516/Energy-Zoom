@@ -1,21 +1,24 @@
-SRC = src/*.cpp src/*/*.cpp
-COMPILER = g++
-COMPILER_FLAGS = -w
+CXX = g++
+SRC := $(patsubst %.cpp,%.o,$(wildcard src/*.cpp))
+SRC2 := $(patsubst %.cpp,%.o,$(wildcard src/*/*.cpp))
+EXE = DOS2
+LDFLAGS = -lSDL2 -lSDL2_image
+#CXXFLAGS = -j
 
-#COMPILER_FLAGS specifies the additional compilation options we're using
-# -w suppresses all warnings
-COMPILER_FLAGS = -w
+$(EXE): $(SRC) $(SRC2)
+	ccache $(CXX) -o build/$(EXE) $(SRC) $(SRC2) $(LDFLAGS) $(CXXFLAGS)
 
-# librerias
-LINKER_FLAGS = -lSDL2 -lSDL2_image
+-include $(SRC:.o=.d)
+-include $(SRC2:.o=.d)
 
-OUTPUT = EZ
+%.o: %.cpp
+	$(CXX) -c $< -o $@ $(CXXFLAGS)
+	@$(CXX) -MM $(CXXFLAGS) $*.cpp > $*.d
+	@mv -f $*.d $*.d.tmp
+	@sed -e 's|.*:|$*.o:|' < $*.d.tmp > $*.d
+	@sed -e 's/.*://' -e 's/\\$$//' < $*.d.tmp | fmt -1 | \
+	  sed -e 's/^ *//' -e 's/$$/:/' >> $*.d
+	@rm -f $*.d.tmp
 
-all : $(SRC)
-	$(COMPILER) $(SRC) $(COMPILER_FLAGS) $(LINKER_FLAGS) -o build/$(OUTPUT)
-
-cache : $(SRC)
-	ccache $(COMPILER) $(SRC) $(COMPILER_FLAGS) $(LINKER_FLAGS) -o build/$(OUTPUT)
-
-fault : $(SRC)
-	$(COMPILER) $(SRC) $(COMPILER_FLAGS) $(LINKER_FLAGS) -o build/$(OUTPUT) -g
+clean:
+	rm -f $(EXE) src/*.o src/*.d src/*/*.o src/*/*.d
