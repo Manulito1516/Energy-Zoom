@@ -23,6 +23,7 @@ std::vector<ME_Texture*> g_textures;
 // Road
 float g_posZf = 0;
 float g_roadTurn = 0;
+float g_roadAngle = 0;
 bool g_onRoad = true;
 ifstream Track;
 
@@ -106,7 +107,7 @@ void reloadTrack(){
 		//Track.seekg(0);
 	}
 	
-	Track.open("tracks/track1");
+	Track.open("tracks/track2");
 }
 
 // function that convert degrees to radians

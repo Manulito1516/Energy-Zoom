@@ -13,7 +13,7 @@
 
 // constructor
 Obj3D::Obj3D(){
-	mX = 200;
+	mX = 5;
 	mY = 0;
 	mZ = 300; // position on track
 	
@@ -46,14 +46,14 @@ void Obj3D::render(){
 		return;
 	}
 	
-	// Testing
-	mYRender = HORIZON - 5 + (SCREEN_HEIGHT - HORIZON) * mScaleFactor;
-	mXRender = mX + (SCREEN_WIDTH - mX)* mScaleFactor;
-
-	
 	// render
 	mScale.w = 1 + WIDTH * mScaleFactor;
 	mScale.h = 1 + HEIGHT * mScaleFactor;
+	
+	//mXRender = mX + (SCREEN_WIDTH - mX)* mScaleFactor;
+	mYRender = HORIZON - 5 + (SCREEN_HEIGHT - HORIZON) * mScaleFactor;
+	// g_roadAngle -> mRoadAngle
+	mXRender = mX / mScaleFactor + (SCREEN_WIDTH / 2 - mScale.w) + ((SCREEN_WIDTH) * sin(degToRad(g_roadTurn)));
 	
 	mTexture.render(mXRender, mYRender + mY, &mScale, &mClip);
 }

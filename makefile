@@ -1,7 +1,7 @@
 CXX = g++
 SRC := $(patsubst %.cpp,%.o,$(wildcard src/*.cpp))
 SRC2 := $(patsubst %.cpp,%.o,$(wildcard src/*/*.cpp))
-EXE = DOS2
+EXE = EZ
 LDFLAGS = -lSDL2 -lSDL2_image
 #CXXFLAGS = -j
 

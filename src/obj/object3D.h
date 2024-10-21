@@ -21,8 +21,8 @@ class Obj3D{
     float get_scaleFactor() const { return mScaleFactor; }
 
   private:
-    int mX, mY, mYRender, mXRender;
-    float mZ, mScaleFactor;
+    int mX, mY, mYRender;
+    float mZ, mXRender, mScaleFactor;
     int mWidth, mHeight;
 	SDL_Rect mClip;
     SDL_Rect mScale;

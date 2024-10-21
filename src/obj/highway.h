@@ -61,7 +61,7 @@ private:
 	SDL_Rect mHitbox;
 	
 	int mWait, mCloseness; // texturizing
-	float mRoadX, mRoadAngle; // perspective of position and turn
+	float mRoadX; // perspective of position and turn
 	
 	std::string mTexturePath;
 	ME_Texture mTexture;

@@ -67,7 +67,7 @@ Highway::Highway(){
 	// efectos de avance, perspectiva y giro
 	mRoadX = -26;
 	
-	mRoadAngle = mRoadX;
+	g_roadAngle = mRoadX;
 	
 	mPosXf = mPosX;
 	mWidthf = mScale.w;
@@ -243,8 +243,8 @@ void Highway::render(){
 	mWait = 1;
 	mCloseness = 1; // cercania
 	
-	// Como mRoadAngle va a ir cambiando dentro del loop, lo "reinicio" antes de entrar
-	mRoadAngle = mRoadX - ((SCREEN_WIDTH / 4) * sin(g_roadTurn));
+	// Como g_roadAngle va a ir cambiando dentro del loop, lo "reinicio" antes de entrar
+	g_roadAngle = mRoadX - ((SCREEN_WIDTH / 4) * sin(degToRad(g_roadTurn)));
 	while (mPosY < SCREEN_HEIGHT){
 		
 		// prepare to render
@@ -255,11 +255,11 @@ void Highway::render(){
 		mTexture.render(mPosX, mPosY, &mScale, &mClip);
 		
 		// calculate road angle
-		mWidthf += 4* cos(degToRad(mRoadAngle));
-		mPosXf += 4* sin(degToRad(mRoadAngle));
+		mWidthf += 4* cos(degToRad(g_roadAngle));
+		mPosXf += 4* sin(degToRad(g_roadAngle));
 		
 		// roadTurn
-		mRoadAngle += g_roadTurn;
+		g_roadAngle += g_roadTurn;
 		
 		// -----TEXTURIZING based on distance
 		--mWait; // wait controla cuantos ciclos deben pasar hasta renderizar la siguiente fila
