@@ -87,7 +87,7 @@ int main(int argc, char* args[]){
 				int numbar = 10;
 				std::string debugTexts[numbar] = {
 					"g_posZ: " + std::to_string(g_posZf),
-					"highway.mVel: " + std::to_string(o_highway.get_vel()),
+					"highway.mVel: " + std::to_string(g_vel),
 					"highway.mAccel: " + std::to_string(o_highway.get_accel()),
 					"g_roadTurn: " + std::to_string(g_roadTurn),
 					"mNextTrigger: " + std::to_string(o_highway.get_nextTrigger()),

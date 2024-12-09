@@ -25,7 +25,7 @@ Highway::Highway(){
 
 	// Positions and velocity
 	//g_posZf = 0.0;
-	mVel = 0.0;
+	g_vel = 0.0;
 	mAcceleration = 0.0;
 	mVelXf = 0;
 	mTurnVel = 0;
@@ -111,36 +111,36 @@ void Highway::takeInput(SDL_Event &e){
 
 void Highway::update(){
 	//Move the Highway left or right
-	mRoadX += mVelXf * (mVel/HIGHWAY_MAX_VEL);
-	if (mVel > 0) {
+	mRoadX += mVelXf * (g_vel/HIGHWAY_MAX_VEL);
+	if (g_vel > 0) {
 		g_roadTurn += mTurnVel;
 	}
 	
 	// Acceleration and Z axis things
-	if (mVel < mMaxVelocity){
+	if (g_vel < mMaxVelocity){
 		mAcceleration = mThrottle / 2; // is this temporary?
-		mVel += mAcceleration;
+		g_vel += mAcceleration;
 	}
 	
 	// "Friction", "air resistance", yeah, you get it
-	if (mVel > 0){
-		mVel -= HIGHWAY_VEL / 4 * (1+mBrake);
-	} else if (mVel < 0){
-		mVel += HIGHWAY_VEL / 4 * (1+mBrake);
+	if (g_vel > 0){
+		g_vel -= HIGHWAY_VEL / 4 * (1+mBrake);
+	} else if (g_vel < 0){
+		g_vel += HIGHWAY_VEL / 4 * (1+mBrake);
 	}
 	
 	// Clip min values
-	if (mVel < 0.001 || mVel > 3){ // realistically speaking, 3 is too fast
-		mVel = 0;
+	if (g_vel < 0.001 || g_vel > 3){ // realistically speaking, 3 is too fast
+		g_vel = 0;
 	}
 	
 	// Position (DON'T MODIFY DIRECTLY)
-	mClipYf -= mVel; // controls the texture side (note that this is negative)
-	g_posZf += mVel; // controls the position on circuit
+	mClipYf -= g_vel; // controls the texture side (note that this is negative)
+	g_posZf += g_vel; // controls the position on circuit
 	
 	// Moves the car out if it goes straight during a turn
-	if (mVel > HIGHWAY_MAX_VEL / 4){
-		mRoadX += g_roadTurn * (mVel + mThrottle * 50) * 1.4; // higher number means lower grip
+	if (g_vel > HIGHWAY_MAX_VEL / 4){
+		mRoadX += g_roadTurn * (g_vel + mThrottle * 50) * 1.4; // higher number means lower grip
 	}
 	
 	// Hitbox
@@ -153,7 +153,7 @@ void Highway::update(){
 		mMaxVelocity = HIGHWAY_MAX_VEL; 
 	} else {
 		//out of the road
-		//mVel -= HIGHWAY_VEL * 4;
+		//g_vel -= HIGHWAY_VEL * 4;
 		mMaxVelocity = HIGHWAY_MAX_VEL / 4;
 	}
 }
@@ -167,11 +167,11 @@ void Highway::readRoad(){
 		
 		// first check positivity, then if it's not enough...
 		if (mTriggerTurnTarget >= 0 && g_roadTurn < mTriggerTurnTarget) {
-			mTurnVel = mTriggerTurnSpeed * (1+mVel); // turns right
+			mTurnVel = mTriggerTurnSpeed * (1+g_vel); // turns right
 			
 		// check negativity, if it's not enough...
 		} else if (mTriggerTurnTarget <= 0 && g_roadTurn > mTriggerTurnTarget) {
-			mTurnVel = -mTriggerTurnSpeed * (1+mVel); // turns left
+			mTurnVel = -mTriggerTurnSpeed * (1+g_vel); // turns left
 		} else {
 			mTurnVel = 0;
 		}

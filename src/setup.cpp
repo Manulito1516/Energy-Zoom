@@ -24,6 +24,7 @@ std::vector<ME_Texture*> g_textures;
 float g_posZf = 0;
 float g_roadTurn = 0;
 float g_roadAngle = 0;
+float g_vel = 0;
 bool g_onRoad = true;
 ifstream Track;
 

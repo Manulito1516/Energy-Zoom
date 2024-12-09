@@ -40,6 +40,7 @@ extern ME_Texture g_manusFont;
 extern float g_posZf;
 extern float g_roadTurn;
 extern float g_roadAngle;
+extern float g_vel;
 extern bool g_onRoad;
 extern ifstream Track;
 

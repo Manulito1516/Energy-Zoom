@@ -58,26 +58,27 @@ void Car::update(){
 	}
 	
 	// go back to straight
-	if (mDir == 0 or ((mDirDir > 0 and mDirDir < 0) or (mDirDir < 0 and mDirDir > 0))){
+	if (mDir == 0 or g_vel == 0 or ((mDirDir > 0 and mDirDir < 0) or (mDirDir < 0 and mDirDir > 0))){
 		if (mDirDir < 0){
 			mDirDir++;
 		} else if (mDirDir > 0){
 			mDirDir--;
 		}
 	}
+	
 	// DIRDIR
 	// left
 	if (mDirDir > 14 && !mAccelerating) {
 		setSprite(2, 0, true);
 		
-	} else if (mDirDir > 4 && mDir > 0) {
+	} else if (mDirDir > 2 && mDir > 0) {
 		setSprite(1, 0, true);
 		
 	// right
 	} else if (mDirDir < -14 && !mAccelerating) {
 		setSprite(2, 0, false);
 		
-	} else if (mDirDir < -4 && mDir < 0) {
+	} else if (mDirDir < -2 && mDir < 0) {
 		setSprite(1, 0, false);
 	
 	// center
