@@ -31,8 +31,6 @@ public:
 	float get_accel() const { return mAcceleration; }
 	int get_nextTrigger() const { return mTriggerNumber; }
 	int get_triggerPos() const { return mTriggerPos; }
-	int get_roadX() const { return mRoadX; }
-	
 	
 private:
 	int mPosX, mPosY;
@@ -41,6 +39,7 @@ private:
 	// More resolution i guess
 	float mPosXf, mVelXf, mWidthf, mClipYf;
 	float mTurnVel, mAcceleration, mMaxVelocity;
+	//float mRoadAngle;
 	
 	// controls of the car
 	float mThrottle, mBrake;
@@ -60,7 +59,6 @@ private:
 	SDL_Rect mHitbox;
 	
 	int mWait, mCloseness; // texturizing
-	float mRoadX; // perspective of position and turn
 	
 	std::string mTexturePath;
 	ME_Texture mTexture;

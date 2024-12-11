@@ -65,9 +65,9 @@ Highway::Highway(){
 	mCloseness = 0; // cercania con el PoV
 	
 	// efectos de avance, perspectiva y giro
-	mRoadX = -26;
+	g_roadX = -26;
 	
-	g_roadAngle = mRoadX;
+	g_roadAngle = g_roadX;
 	
 	mPosXf = mPosX;
 	mWidthf = mScale.w;
@@ -111,7 +111,9 @@ void Highway::takeInput(SDL_Event &e){
 
 void Highway::update(){
 	//Move the Highway left or right
-	mRoadX += mVelXf * (g_vel/HIGHWAY_MAX_VEL);
+	g_roadX += mVelXf * (g_vel/HIGHWAY_MAX_VEL);
+	
+	//Road turns
 	if (g_vel > 0) {
 		g_roadTurn += mTurnVel;
 	}
@@ -140,11 +142,11 @@ void Highway::update(){
 	
 	// Moves the car out if it goes straight during a turn
 	if (g_vel > HIGHWAY_MAX_VEL / 4){
-		mRoadX += g_roadTurn * (g_vel + mThrottle * 50) * 1.4; // higher number means lower grip
+		g_roadX += g_roadTurn * (g_vel + mThrottle * 50) * 1.4; // higher number means lower grip
 	}
 	
 	// Hitbox
-	mHitbox.x = (mRoadX + 24) *9;//- SCREEN_WIDTH / 2;
+	mHitbox.x = (g_roadX + 24) *9;//- SCREEN_WIDTH / 2;
 	
 	// *** COLLISIONS ***
 	// road
@@ -244,7 +246,7 @@ void Highway::render(){
 	mCloseness = 1; // cercania
 	
 	// Como g_roadAngle va a ir cambiando dentro del loop, lo "reinicio" antes de entrar
-	g_roadAngle = mRoadX - ((SCREEN_WIDTH / 4) * sin(degToRad(g_roadTurn)));
+	g_roadAngle = g_roadX - ((SCREEN_WIDTH / 4) * sin(degToRad(g_roadTurn)));
 	while (mPosY < SCREEN_HEIGHT){
 		
 		// prepare to render

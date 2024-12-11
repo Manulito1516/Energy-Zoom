@@ -13,7 +13,7 @@
 
 // constructor
 Obj3D::Obj3D(){
-	mX = 5;
+	mX = 0;
 	mY = 0;
 	mZ = 300; // position on track
 	
@@ -50,10 +50,14 @@ void Obj3D::render(){
 	mScale.w = 1 + WIDTH * mScaleFactor;
 	mScale.h = 1 + HEIGHT * mScaleFactor;
 	
-	//mXRender = mX + (SCREEN_WIDTH - mX)* mScaleFactor;
 	mYRender = HORIZON - 5 + (SCREEN_HEIGHT - HORIZON) * mScaleFactor;
-	// g_roadAngle -> mRoadAngle
-	mXRender = mX / mScaleFactor + (SCREEN_WIDTH / 2 - mScale.w) + ((SCREEN_WIDTH) * sin(degToRad(g_roadTurn)));
+	// g_roadAngle -> mRoadAngle  ??
+							 		
+	mXRender =
+	(SCREEN_WIDTH / 2 - mScale.w / 2) 		// centro
+	+ mX * mScaleFactor 					// offset
+	+ SCREEN_WIDTH * sin(g_roadTurn)		// giro del highway
+	+ 4* (mYRender - SCREEN_HEIGHT / 3) * sin(degToRad(g_roadAngle));		// posicion x del auto
 	
 	mTexture.render(mXRender, mYRender + mY, &mScale, &mClip);
 }

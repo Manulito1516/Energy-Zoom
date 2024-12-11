@@ -39,6 +39,7 @@ extern ME_Texture g_manusFont;
 // Road globals
 extern float g_posZf;
 extern float g_roadTurn;
+extern float g_roadX;
 extern float g_roadAngle;
 extern float g_vel;
 extern bool g_onRoad;

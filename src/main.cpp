@@ -87,14 +87,14 @@ int main(int argc, char* args[]){
 				int numbar = 10;
 				std::string debugTexts[numbar] = {
 					"g_posZ: " + std::to_string(g_posZf),
-					"highway.mVel: " + std::to_string(g_vel),
+					"g_vel: " + std::to_string(g_vel),
 					"highway.mAccel: " + std::to_string(o_highway.get_accel()),
 					"g_roadTurn: " + std::to_string(g_roadTurn),
 					"mNextTrigger: " + std::to_string(o_highway.get_nextTrigger()),
 					"mTriggerPos: " + std::to_string(o_highway.get_triggerPos()),
 					"onRoad: " + std::to_string(g_onRoad),
 					"cardir: " + std::to_string(o_car.get_dir()),
-					"mRoadX " + std::to_string(o_highway.get_roadX()),
+					"g_roadX " + std::to_string(g_roadX),
 					"mScaleFactor " + std::to_string(o_obj3d.get_scaleFactor())
 				};
 				
