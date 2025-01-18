@@ -45,7 +45,7 @@ Highway::Highway(){
 	// Hitbox
 	mHitbox.x = 0;
 	mHitbox.y = SCREEN_HEIGHT * (2.00/3.00);
-	mHitbox.w = SCREEN_WIDTH;
+	mHitbox.w = SCREEN_WIDTH + 70;
 	mHitbox.h = 32;
 
 	//Scale texture rect
@@ -78,7 +78,7 @@ Highway::Highway(){
 	mTexture.load(mTexturePath, HIGHWAY_TEX_W, HIGHWAY_TEX_H);
 	g_textures.push_back(&mTexture); // add to the end of the vector/array
 	
-	Track.seekg(0, ifstream::beg);
+	g_track.seekg(0, ifstream::beg);
 	loadTrigger();
 }
 
@@ -142,11 +142,11 @@ void Highway::update(){
 	
 	// Moves the car out if it goes straight during a turn
 	if (g_vel > HIGHWAY_MAX_VEL / 4){
-		g_roadX += g_roadTurn * (g_vel + mThrottle * 50) * 1.4; // higher number means lower grip
+		g_roadX += g_roadTurn * (g_vel + mThrottle * 80) * 0.9; // higher number means lower grip
 	}
 	
 	// Hitbox
-	mHitbox.x = (g_roadX + 24) *9;//- SCREEN_WIDTH / 2;
+	mHitbox.x = (g_roadX + 24) *9 + SCREEN_WIDTH * sin(g_roadTurn) * 2.5 - (mHitbox.w - SCREEN_WIDTH) / 2;//- SCREEN_WIDTH / 2;
 	
 	// *** COLLISIONS ***
 	// road
@@ -163,7 +163,7 @@ void Highway::update(){
 void Highway::readRoad(){
 	if (g_posZf > mTriggerPos){ // after trigger position
 		if (mTriggerPos == 0){
-			Track.seekg(0, ifstream::beg);
+			g_track.seekg(0, ifstream::beg);
 			loadTrigger();
 		}
 		
@@ -204,7 +204,7 @@ void Highway::readRoad(){
 }
 
 void Highway::loadTrigger(){
-	if (!Track.is_open()){
+	if (!g_track.is_open()){
 		return;
 	}
 	
@@ -213,10 +213,10 @@ void Highway::loadTrigger(){
 	string sTriggerTurnTarget;
 	string sTriggerTurnPos;
 	
-	// save the data from file Track to strings
-	getline(Track, sTriggerPos, ',');
-	getline(Track, sTriggerTurnTarget, ',');
-	getline(Track, sTriggerTurnPos, ';');
+	// get the data from file g_track in strings
+	getline(g_track, sTriggerPos, ',');
+	getline(g_track, sTriggerTurnTarget, ',');
+	getline(g_track, sTriggerTurnPos, ';');
 	
 	// string to int, string to double (float)
 	mTriggerPos = atoi(sTriggerPos.c_str());
@@ -253,8 +253,9 @@ void Highway::render(){
 		mScale.w = (int)mWidthf;
 		mPosX = (int)mPosXf;
 		
-		// render
+		//***************** RENDER *****************
 		mTexture.render(mPosX, mPosY, &mScale, &mClip);
+		//***************** RENDER *****************
 		
 		// calculate road angle
 		mWidthf += 4* cos(degToRad(g_roadAngle));
@@ -278,4 +279,7 @@ void Highway::render(){
 		
 		++mPosY; // siguiente fila
 	}
+	
+	// hitbox rendering
+	//g_hitboxTexture.render(mHitbox.x, mHitbox.y, &mHitbox);
 }

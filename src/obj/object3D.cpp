@@ -51,15 +51,17 @@ void Obj3D::render(){
 	mScale.h = 1 + HEIGHT * mScaleFactor;
 	
 	mYRender = HORIZON - 5 + (SCREEN_HEIGHT - HORIZON) * mScaleFactor;
-	// g_roadAngle -> mRoadAngle  ??
 							 		
 	mXRender =
-	(SCREEN_WIDTH / 2 - mScale.w / 2) 		// centro
-	+ mX * mScaleFactor 					// offset
-	+ SCREEN_WIDTH * sin(g_roadTurn)		// giro del highway
-	//mX + (mYRender - HORIZON) * 4 * sin(degToRad(g_roadAngle + (mYRender - HORIZON) * g_roadTurn));
-	+ 4* (mYRender - SCREEN_HEIGHT / 3) * sin(degToRad(g_roadAngle));		// posicion x del auto
-	
+		(SCREEN_WIDTH / 2 - mScale.w / 2) 		// centro
+		+ mX * mScaleFactor 					// offset
+		
+		+ (mYRender - HORIZON) * 4 * sin(degToRad(g_roadAngle + (mYRender - HORIZON) * g_roadTurn))
+		+ SCREEN_WIDTH * sin(g_roadTurn) // no cambia nada
+		
+		//+ 4* (mYRender - SCREEN_HEIGHT / 3) * sin(degToRad(g_roadAngle));		// posicion x del auto
+		
+	;
 	mTexture.render(mXRender, mYRender + mY, &mScale, &mClip);
 }
 

@@ -98,6 +98,7 @@ void Car::setSprite(int a, int b, bool flip = false){
 }
 
 void Car::render(){
+	//g_hitboxTexture.render(mHitbox.x, mHitbox.y, &mHitbox);
 	if (mFlip) {
 		mTexture.render(mPosX, mPosY, NULL, &mClip, 0.0, NULL, SDL_FLIP_HORIZONTAL);
 	} else {

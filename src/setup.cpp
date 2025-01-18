@@ -16,6 +16,7 @@ bool g_fullscreen = false;
 bool g_soft_render = false;
 
 ME_Texture g_manusFont;
+ME_Texture g_hitboxTexture;
 
 // vector (dinamic array) where the textures will be listed
 std::vector<ME_Texture*> g_textures;
@@ -27,7 +28,7 @@ float g_roadX = 0; // perspective of position and turn
 float g_roadAngle = 0;
 float g_vel = 0;
 bool g_onRoad = true;
-ifstream Track;
+ifstream g_track;
 
 // ---------------------------------------------
 // functions
@@ -73,10 +74,11 @@ bool init(){
 }
 
 void close(){
-	Track.close();
+	g_track.close();
 	
 	// close font (ME_Texture)
 	g_manusFont.free();
+	g_hitboxTexture.free();
 	
 	//Free the textures
 	for (int i = 0; i < g_textures.size(); ++i){
@@ -97,19 +99,20 @@ void close(){
 bool loadAssets(){
 	bool success = true;
 	g_manusFont.load("assets/manus.png", 128, 64);
+	g_hitboxTexture.load("assets/hitbox.png", 16, 16);
 	reloadTrack();
 	
 	return success;
 }
 
 void reloadTrack(){
-	if (Track.is_open()){
-		Track.close();
-		//Track.clear();
-		//Track.seekg(0);
+	if (g_track.is_open()){
+		g_track.close();
+		//g_track.clear();
+		//g_track.seekg(0);
 	}
 	
-	Track.open("tracks/track2");
+	g_track.open("tracks/track1");
 }
 
 // function that convert degrees to radians

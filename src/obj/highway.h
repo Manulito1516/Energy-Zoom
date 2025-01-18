@@ -48,8 +48,6 @@ private:
 	int mTriggerNumber, mTriggerPos, mTriggerLoopPos;
 	float mTriggerTurnSpeed, mTriggerTurnTarget;
 	
-	//std::ifstream Track;
-	
 	
 	// The scale and clip for the render function (drawing in the distance)
 	SDL_Rect mScale;

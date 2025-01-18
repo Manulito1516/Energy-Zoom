@@ -35,6 +35,7 @@ extern vector<ME_Texture*> g_textures;
 const int g_fontSize = 10;
 const int g_fontSpacing = 8;
 extern ME_Texture g_manusFont;
+extern ME_Texture g_hitboxTexture;
 
 // Road globals
 extern float g_posZf;
@@ -43,7 +44,7 @@ extern float g_roadX;
 extern float g_roadAngle;
 extern float g_vel;
 extern bool g_onRoad;
-extern ifstream Track;
+extern ifstream g_track;
 
 
 //-----------------------
