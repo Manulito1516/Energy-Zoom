@@ -7,6 +7,9 @@
 #include <fstream>
 
 #include "../ME/ME_Texture.h"
+#include "../ME/ME_Scene.h"
+#include "../scenes/GameScene.h"
+class GameScene;
 
 class Highway{
 public:
@@ -16,11 +19,12 @@ public:
 	static const float HIGHWAY_MAX_VEL;
 
 	Highway();
+	void create(GameScene* parent);
 
 	void takeInput(SDL_Event &e);
 	void update();
 	void readRoad();
-	void render();
+	void render(ME_Texture* texture);
 	
 	void loadTrigger();
 	
@@ -33,6 +37,7 @@ public:
 	int get_triggerPos() const { return mTriggerPos; }
 	
 private:
+	GameScene* mParent;
 	int mPosX, mPosY;
 	int mStartPosY;
 	
@@ -57,9 +62,6 @@ private:
 	SDL_Rect mHitbox;
 	
 	int mWait, mCloseness; // texturizing
-	
-	std::string mTexturePath;
-	ME_Texture mTexture;
 };
 
 #endif

@@ -11,12 +11,10 @@ class BG{
     static const int BG_WIDTH = 8;
     static const int BG_HEIGHT = 128;
     
-    void render();
+    void render(ME_Texture* texture);
 
   private:
     int mX, mY;
-    std::string mTexturePath;
-    ME_Texture mTexture;
 };
 
 #endif

@@ -1,13 +1,10 @@
 #include "setup.h"
-#include "obj/circle.h"
-#include "obj/car.h"
-#include "obj/highway.h"
-#include "obj/bg.h"
-#include "obj/grass.h"
-#include "obj/object3D.h"
 
 //#include "obj/object.h"
+#include "ME/ME_Scene.h"
 #include "ME/ME_Timer.h"
+
+#include "scenes/TitleScene.h"
 
 int main(int argc, char* args[]){
 	if (init()){
@@ -17,13 +14,8 @@ int main(int argc, char* args[]){
 			SDL_Event event;
 			
 			// *** INITIALIZE OBJECTS ***
-			Circle o_circle;
-			Highway o_highway;
-			Car o_car;
-			BG o_bg;
-			Grass o_grass;
-			Obj3D o_obj3d;
-			//Obj_base obj;
+			g_currentScene = TitleScene::get();
+			g_currentScene->enter();
 			
 			//SDL_Color textColor = {255, 255, 255, 255};
 			ME_Timer fpsTimer;
@@ -61,9 +53,7 @@ int main(int argc, char* args[]){
 							}
 						}
 					}
-					o_circle.takeInput(event);
-					o_highway.takeInput(event);
-					o_car.takeInput(event);
+					g_currentScene->takeInput(event);
 				}
 				
 				//Calculate and correct fps
@@ -73,51 +63,24 @@ int main(int argc, char* args[]){
 				}
 				
 				// *** CHECK COLLISIONS ***
-				g_onRoad = checkCollision(o_highway.get_hitbox(), o_car.get_hitbox());
+				//g_onRoad = checkCollision(o_highway.get_hitbox(), o_car.get_hitbox());
 				
 				// *** UPDATE OBJECTS ***
-				o_circle.update();
-				o_highway.update();
-				o_highway.readRoad();
-				o_car.update();
-				//obj.update();
+				g_currentScene->update();
 				
 				// FPS COUNTER
 				timeText = "FPS: " + std::to_string(avgFPS);
-				int numbar = 10;
-				std::string debugTexts[numbar] = {
-					"g_posZ: " + std::to_string(g_posZf),
-					"g_vel: " + std::to_string(g_vel),
-					"highway.mAccel: " + std::to_string(o_highway.get_accel()),
-					"g_roadTurn: " + std::to_string(g_roadTurn),
-					"mNextTrigger: " + std::to_string(o_highway.get_nextTrigger()),
-					"mTriggerPos: " + std::to_string(o_highway.get_triggerPos()),
-					"onRoad: " + std::to_string(g_onRoad),
-					"cardir: " + std::to_string(o_car.get_dir()),
-					"g_roadX " + std::to_string(g_roadX),
-					"mScaleFactor " + std::to_string(o_obj3d.get_scaleFactor())
-				};
+				
+				changeScene();
 				
 				// clear screen
 				SDL_SetRenderDrawColor(g_renderer, 0x00, 0x00, 0x00, 0xFF);
 				SDL_RenderClear(g_renderer);
 				
 				// *** RENDER OBJECTS ***
-				// render background
-				o_bg.render();
-				// objects
-				o_grass.render(o_highway.get_clipYf());
-				o_highway.render();
-				o_car.render();
-				o_circle.render();
-				o_obj3d.render();
-				//obj.render();
+				g_currentScene->render();
 				
 				g_manusFont.renderText(0,0, timeText);
-				
-				for (int i = 0; i < numbar; i++){
-					g_manusFont.renderText(0, 12 + i * 12, debugTexts[i]);
-				}
 				
 				// update screen
 				SDL_RenderPresent(g_renderer);

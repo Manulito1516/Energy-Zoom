@@ -26,14 +26,10 @@ Circle::Circle(){
 	
 	mSpeedX = 0;
 	mSpeedY = 0;
-
-	mTexturePath = "assets/circle.png";
-	mTexture.load(mTexturePath, CIRCLE_WIDTH, CIRCLE_HEIGHT);
-	g_textures.push_back(&mTexture); // add to the end of the vector/array
 }
 
-void Circle::render(){
-  mTexture.render(mX, mY, &mScale);
+void Circle::render(ME_Texture* texture){
+  texture->render(mX, mY, &mScale);
 }
 
 void Circle::update(){

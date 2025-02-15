@@ -14,16 +14,12 @@
 BG::BG(){
 	mX = 0;
 	mY = 0;
-
-	mTexturePath = "assets/bg/bg.png";
-	mTexture.load(mTexturePath, BG_WIDTH, BG_HEIGHT);
-	g_textures.push_back(&mTexture); // add to the end of the vector/array
 }
 
-void BG::render(){
+void BG::render(ME_Texture* texture){
 	mX = 0;
 	while (mX < SCREEN_WIDTH){
-		mTexture.render(mX, mY);
+		texture->render(mX, mY);
 		mX += BG_WIDTH;
 	}
 }

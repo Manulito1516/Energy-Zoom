@@ -5,7 +5,11 @@
 #include "../setup.h"
 #include "../ME/ME_Texture.h"
 
-Car::Car(){
+Car::Car(){}
+
+void Car::create(GameScene* parent){
+	mParent = parent;
+	
 	mPosX = SCREEN_WIDTH / 2 - CAR_WIDTH / 2;
 	mPosY = SCREEN_HEIGHT * (2.00/3.00); // 160
 
@@ -23,10 +27,6 @@ Car::Car(){
 	mClip.w = 32; // fijo
 	mClip.h = 32; // fijo
 	mFlip = false;
-	
-	mTexturePath = "assets/sprites/carsheet.png";
-	mTexture.load(mTexturePath, CAR_WIDTH, CAR_HEIGHT);
-	g_textures.push_back(&mTexture); // add to the end of the vector/array
 }
 
 void Car::takeInput(SDL_Event &e){
@@ -58,7 +58,7 @@ void Car::update(){
 	}
 	
 	// go back to straight
-	if (mDir == 0 or g_vel == 0 or ((mDirDir > 0 and mDirDir < 0) or (mDirDir < 0 and mDirDir > 0))){
+	if (mDir == 0 or mParent->s_vel == 0 or ((mDirDir > 0 and mDirDir < 0) or (mDirDir < 0 and mDirDir > 0))){
 		if (mDirDir < 0){
 			mDirDir++;
 		} else if (mDirDir > 0){
@@ -97,11 +97,11 @@ void Car::setSprite(int a, int b, bool flip = false){
 	}
 }
 
-void Car::render(){
-	//g_hitboxTexture.render(mHitbox.x, mHitbox.y, &mHitbox);
+void Car::render(ME_Texture* texture){
+	//mParent->s_hitboxTexture.render(mHitbox.x, mHitbox.y, &mHitbox);
 	if (mFlip) {
-		mTexture.render(mPosX, mPosY, NULL, &mClip, 0.0, NULL, SDL_FLIP_HORIZONTAL);
+		texture->render(mPosX, mPosY, NULL, &mClip, 0.0, NULL, SDL_FLIP_HORIZONTAL);
 	} else {
-		mTexture.render(mPosX, mPosY, NULL, &mClip);
+		texture->render(mPosX, mPosY, NULL, &mClip);
 	}
 }

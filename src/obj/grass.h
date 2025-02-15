@@ -15,7 +15,7 @@ public:
 
 	Grass();
 
-	void render(float lClipYf);
+	void render(ME_Texture* texture, float lClipYf);
 	
 private:
 	int mPosX, mPosY;
@@ -26,9 +26,6 @@ private:
 	SDL_Rect mClip;
 	
 	int mWait, mCloseness; // texturizing
-	
-	std::string mTexturePath;
-	ME_Texture mTexture;
 };
 
 #endif

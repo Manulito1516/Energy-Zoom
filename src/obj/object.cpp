@@ -26,14 +26,10 @@ Obj_base::Obj_base(){
 	mClip.y = 0;
 	mClip.w = 32;
 	mClip.h = 32;
-
-	mTexturePath = "assets/circle.png";
-	mTexture.load(mTexturePath, OBJ_WIDTH, OBJ_HEIGHT);
-	g_textures.push_back(&mTexture); // add to the end of the vector/array
 }
 
-void Obj_base::render(){
-  mTexture.render(mX, mY, &mScale, &mClip);
+void Obj_base::render(ME_Texture* texture){
+  texture->render(mX, mY, &mScale, &mClip);
 }
 
 void Obj_base::update(){

@@ -10,9 +10,14 @@
 #include "../setup.h"
 
 #include "../ME/ME_Texture.h"
+#include "../scenes/GameScene.h"
 
 // constructor
-Obj3D::Obj3D(){
+Obj3D::Obj3D(){}
+
+void Obj3D::create(GameScene* parent){
+	mParent = parent;
+	
 	mX = 0;
 	mY = 0;
 	mZ = 300; // position on track
@@ -30,18 +35,14 @@ Obj3D::Obj3D(){
 	mClip.y = 0;
 	mClip.w = 32;
 	mClip.h = 32;
-
-	mTexturePath = "assets/circle.png";
-	mTexture.load(mTexturePath, WIDTH, HEIGHT);
-	g_textures.push_back(&mTexture); // add to the end of the vector/array
 }
 
-void Obj3D::render(){
-	if (g_posZf >= mZ){
+void Obj3D::render(ME_Texture* texture){
+	if (mParent->s_posZf >= mZ){
 		return;
 	}
 	//mZ no debe ser 0
-	mScaleFactor = mZ / (mZ + abs(mZ - g_posZf) * 40); // (mZ - g_posZf) = 0 cuando llega al trigger (no necesariamente a la altura del auto)
+	mScaleFactor = mZ / (mZ + abs(mZ - mParent->s_posZf) * 40); // (mZ - mParent->s_posZf) = 0 cuando llega al trigger (no necesariamente a la altura del auto)
 	if (mScaleFactor < 0.02 || mScaleFactor > 1){
 		return;
 	}
@@ -56,13 +57,13 @@ void Obj3D::render(){
 		(SCREEN_WIDTH / 2 - mScale.w / 2) 		// centro
 		+ mX * mScaleFactor 					// offset
 		
-		+ (mYRender - HORIZON) * 4 * sin(degToRad(g_roadAngle + (mYRender - HORIZON) * g_roadTurn))
-		+ SCREEN_WIDTH * sin(g_roadTurn) // no cambia nada
+		+ (mYRender - HORIZON) * 4 * sin(degToRad(mParent->s_roadAngle + (mYRender - HORIZON) * mParent->s_roadTurn))
+		+ SCREEN_WIDTH * sin(mParent->s_roadTurn) // no cambia nada
 		
-		//+ 4* (mYRender - SCREEN_HEIGHT / 3) * sin(degToRad(g_roadAngle));		// posicion x del auto
+		//+ 4* (mYRender - SCREEN_HEIGHT / 3) * sin(degToRad(mParent->s_roadAngle));		// posicion x del auto
 		
 	;
-	mTexture.render(mXRender, mYRender + mY, &mScale, &mClip);
+	texture->render(mXRender, mYRender + mY, &mScale, &mClip);
 }
 
 void Obj3D::update(){

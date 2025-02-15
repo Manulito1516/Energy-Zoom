@@ -13,15 +13,13 @@ class Obj_base{
 
 	//void takeInput(SDL_Event &e);
     void update();
-    void render();
+    void render(ME_Texture* texture);
 
   private:
     int mX, mY, mSpeedX, mSpeedY;
     int mWidth, mHeight;
 	SDL_Rect mClip;
     SDL_Rect mScale;
-    std::string mTexturePath;
-    ME_Texture mTexture;
 };
 
 #endif

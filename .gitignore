@@ -1,4 +1,6 @@
 #ignore all binary and project files
 *.exe
+*.o
+*.d
 EZ
 *.geany

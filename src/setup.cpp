@@ -1,7 +1,7 @@
 #include "setup.h"
 
 #include <stdio.h>
-#include <iosfwd>
+
 //#include <fstream>
 #include <vector>
 #include <SDL2/SDL.h>
@@ -9,6 +9,7 @@
 
 #include "ME/ME_Texture.h"
 #include "ME/ME_Timer.h"
+#include "ME/ME_Scene.h"
 
 SDL_Window *g_window = NULL;
 SDL_Renderer *g_renderer = NULL;
@@ -19,16 +20,11 @@ ME_Texture g_manusFont;
 ME_Texture g_hitboxTexture;
 
 // vector (dinamic array) where the textures will be listed
-std::vector<ME_Texture*> g_textures;
+std::vector<ME_Texture*> g_textures; //TODO: remove this shit
 
-// Road
-float g_posZf = 0;
-float g_roadTurn = 0;
-float g_roadX = 0; // perspective of position and turn
-float g_roadAngle = 0;
-float g_vel = 0;
-bool g_onRoad = true;
-ifstream g_track;
+// scenes
+ME_Scene* g_currentScene = NULL;
+ME_Scene* g_nextScene = NULL;
 
 // ---------------------------------------------
 // functions
@@ -74,16 +70,12 @@ bool init(){
 }
 
 void close(){
-	g_track.close();
+	g_currentScene->exit();
 	
 	// close font (ME_Texture)
 	g_manusFont.free();
 	g_hitboxTexture.free();
 	
-	//Free the textures
-	for (int i = 0; i < g_textures.size(); ++i){
-		g_textures[i]->free();
-	}
 	//Destroy renderer and window
 	SDL_DestroyRenderer(g_renderer);
 	SDL_DestroyWindow(g_window);
@@ -95,15 +87,33 @@ void close(){
 	SDL_Quit();
 }
 
+void setNextScene(ME_Scene *newScene){
+	//Set the next scene
+	g_nextScene = newScene;
+}
+
+void changeScene(){
+    //If the scene needs to be changed
+    if(g_nextScene != NULL){
+		g_currentScene->exit();
+		g_nextScene->enter();
+
+        //Change the current scene ID
+        g_currentScene = g_nextScene;
+        g_nextScene = NULL;
+    }
+}
+
 // assets
 bool loadAssets(){
 	bool success = true;
 	g_manusFont.load("assets/manus.png", 128, 64);
 	g_hitboxTexture.load("assets/hitbox.png", 16, 16);
-	reloadTrack();
+	//reloadTrack();
 	
 	return success;
 }
+/*
 
 void reloadTrack(){
 	if (g_track.is_open()){
@@ -113,7 +123,7 @@ void reloadTrack(){
 	}
 	
 	g_track.open("tracks/track1");
-}
+}*/
 
 // function that convert degrees to radians
 float degToRad(float degrees){
@@ -135,3 +145,4 @@ bool checkCollision(SDL_Rect RectA, SDL_Rect RectB){
 		return false;
 	}
 }
+

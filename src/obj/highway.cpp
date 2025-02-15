@@ -11,21 +11,26 @@
 
 #include "../setup.h"
 #include "../ME/ME_Texture.h"
+#include "../scenes/GameScene.h"
 using namespace std;
 
 // arreglen los header carajo
 const float Highway::HIGHWAY_VEL = 0.01;
 const float Highway::HIGHWAY_MAX_VEL = 0.85;
 
-Highway::Highway(){	
+Highway::Highway(){}
+
+void Highway::create(GameScene* parent){
+	mParent = parent;
+	
 	mPosX = SCREEN_WIDTH / 2; // Centro
 	mPosY = SCREEN_HEIGHT / 2; // de la mitad para abajo
 	
 	mStartPosY = SCREEN_HEIGHT / 3;
 
 	// Positions and velocity
-	//g_posZf = 0.0;
-	g_vel = 0.0;
+	//mParent->s_posZf = 0.0;
+	mParent->s_vel = 0.0;
 	mAcceleration = 0.0;
 	mVelXf = 0;
 	mTurnVel = 0;
@@ -65,20 +70,16 @@ Highway::Highway(){
 	mCloseness = 0; // cercania con el PoV
 	
 	// efectos de avance, perspectiva y giro
-	g_roadX = -26;
+	mParent->s_roadX = -26; // this isn't working
 	
-	g_roadAngle = g_roadX;
+	mParent->s_roadAngle = mParent->s_roadX;
 	
 	mPosXf = mPosX;
 	mWidthf = mScale.w;
 	
 	mClipYf = 0.5; // posicion del clip.y basada en la velocidad del jugador
 	
-	mTexturePath = "assets/sprites/highway.png";
-	mTexture.load(mTexturePath, HIGHWAY_TEX_W, HIGHWAY_TEX_H);
-	g_textures.push_back(&mTexture); // add to the end of the vector/array
-	
-	g_track.seekg(0, ifstream::beg);
+	mParent->s_track.seekg(0, ifstream::beg);
 	loadTrigger();
 }
 
@@ -111,100 +112,100 @@ void Highway::takeInput(SDL_Event &e){
 
 void Highway::update(){
 	//Move the Highway left or right
-	g_roadX += mVelXf * (g_vel/HIGHWAY_MAX_VEL);
+	mParent->s_roadX += mVelXf * (mParent->s_vel/HIGHWAY_MAX_VEL);
 	
 	//Road turns
-	if (g_vel > 0) {
-		g_roadTurn += mTurnVel;
+	if (mParent->s_vel > 0) {
+		mParent->s_roadTurn += mTurnVel;
 	}
 	
 	// Acceleration and Z axis things
-	if (g_vel < mMaxVelocity){
+	if (mParent->s_vel < mMaxVelocity){
 		mAcceleration = mThrottle / 2; // is this temporary?
-		g_vel += mAcceleration;
+		mParent->s_vel += mAcceleration;
 	}
 	
 	// "Friction", "air resistance", yeah, you get it
-	if (g_vel > 0){
-		g_vel -= HIGHWAY_VEL / 4 * (1+mBrake);
-	} else if (g_vel < 0){
-		g_vel += HIGHWAY_VEL / 4 * (1+mBrake);
+	if (mParent->s_vel > 0){
+		mParent->s_vel -= HIGHWAY_VEL / 4 * (1+mBrake);
+	} else if (mParent->s_vel < 0){
+		mParent->s_vel += HIGHWAY_VEL / 4 * (1+mBrake);
 	}
 	
 	// Clip min values
-	if (g_vel < 0.001 || g_vel > 3){ // realistically speaking, 3 is too fast
-		g_vel = 0;
+	if (mParent->s_vel < 0.001 || mParent->s_vel > 3){ // realistically speaking, 3 is too fast
+		mParent->s_vel = 0;
 	}
 	
 	// Position (DON'T MODIFY DIRECTLY)
-	mClipYf -= g_vel; // controls the texture side (note that this is negative)
-	g_posZf += g_vel; // controls the position on circuit
+	mClipYf -= mParent->s_vel; // controls the texture side (note that this is negative)
+	mParent->s_posZf += mParent->s_vel; // controls the position on circuit
 	
 	// Moves the car out if it goes straight during a turn
-	if (g_vel > HIGHWAY_MAX_VEL / 4){
-		g_roadX += g_roadTurn * (g_vel + mThrottle * 80) * 0.9; // higher number means lower grip
+	if (mParent->s_vel > HIGHWAY_MAX_VEL / 4){
+		mParent->s_roadX += mParent->s_roadTurn * (mParent->s_vel + mThrottle * 80) * 0.9; // higher number means lower grip
 	}
 	
 	// Hitbox
-	mHitbox.x = (g_roadX + 24) *9 + SCREEN_WIDTH * sin(g_roadTurn) * 2.5 - (mHitbox.w - SCREEN_WIDTH) / 2;//- SCREEN_WIDTH / 2;
+	mHitbox.x = (mParent->s_roadX + 24) *9 + SCREEN_WIDTH * sin(mParent->s_roadTurn) * 2.5 - (mHitbox.w - SCREEN_WIDTH) / 2;//- SCREEN_WIDTH / 2;
 	
 	// *** COLLISIONS ***
 	// road
-	if (g_onRoad){
+	if (mParent->s_onRoad){
 		//on road
 		mMaxVelocity = HIGHWAY_MAX_VEL; 
 	} else {
 		//out of the road
-		//g_vel -= HIGHWAY_VEL * 4;
+		//mParent->s_vel -= HIGHWAY_VEL * 4;
 		mMaxVelocity = HIGHWAY_MAX_VEL / 4;
 	}
 }
 
 void Highway::readRoad(){
-	if (g_posZf > mTriggerPos){ // after trigger position
+	if (mParent->s_posZf > mTriggerPos){ // after trigger position
 		if (mTriggerPos == 0){
-			g_track.seekg(0, ifstream::beg);
+			mParent->s_track.seekg(0, ifstream::beg);
 			loadTrigger();
 		}
 		
 		// first check positivity, then if it's not enough...
-		if (mTriggerTurnTarget >= 0 && g_roadTurn < mTriggerTurnTarget) {
-			mTurnVel = mTriggerTurnSpeed * (1+g_vel); // turns right
+		if (mTriggerTurnTarget >= 0 && mParent->s_roadTurn < mTriggerTurnTarget) {
+			mTurnVel = mTriggerTurnSpeed * (1+mParent->s_vel); // turns right
 			
 		// check negativity, if it's not enough...
-		} else if (mTriggerTurnTarget <= 0 && g_roadTurn > mTriggerTurnTarget) {
-			mTurnVel = -mTriggerTurnSpeed * (1+g_vel); // turns left
+		} else if (mTriggerTurnTarget <= 0 && mParent->s_roadTurn > mTriggerTurnTarget) {
+			mTurnVel = -mTriggerTurnSpeed * (1+mParent->s_vel); // turns left
 		} else {
 			mTurnVel = 0;
 		}
 		
 		// return to straight
-		if (mTriggerTurnTarget == 0 && g_roadTurn > -0.01 && g_roadTurn < 0.01) {
+		if (mTriggerTurnTarget == 0 && mParent->s_roadTurn > -0.01 && mParent->s_roadTurn < 0.01) {
 			mTurnVel = 0;
-			g_roadTurn = 0;
+			mParent->s_roadTurn = 0;
 		}
 		
 		// same case just after :)
-		if ((mTriggerTurnTarget > 0 && g_roadTurn > mTriggerTurnTarget)
-		or (mTriggerTurnTarget == 0 && g_roadTurn == 0 && mTriggerPos != 0)
-		or (mTriggerTurnTarget < 0 && g_roadTurn < mTriggerTurnTarget)) {
+		if ((mTriggerTurnTarget > 0 && mParent->s_roadTurn > mTriggerTurnTarget)
+		or (mTriggerTurnTarget == 0 && mParent->s_roadTurn == 0 && mTriggerPos != 0)
+		or (mTriggerTurnTarget < 0 && mParent->s_roadTurn < mTriggerTurnTarget)) {
 			mTriggerNumber++;
 			loadTrigger();
 		} 
 	}
 	
-	if (g_posZf > mTriggerLoopPos){
+	if (mParent->s_posZf > mTriggerLoopPos){
 		// temp
 		mTriggerNumber = 1;
-		g_posZf = 0;
+		mParent->s_posZf = 0;
 
-		reloadTrack();
+		mParent->reloadTrack();
 		loadTrigger();
 	}
 }
 
 void Highway::loadTrigger(){
-	if (!g_track.is_open()){
+	if (!mParent->s_track.is_open()){
 		return;
 	}
 	
@@ -213,10 +214,10 @@ void Highway::loadTrigger(){
 	string sTriggerTurnTarget;
 	string sTriggerTurnPos;
 	
-	// get the data from file g_track in strings
-	getline(g_track, sTriggerPos, ',');
-	getline(g_track, sTriggerTurnTarget, ',');
-	getline(g_track, sTriggerTurnPos, ';');
+	// get the data from file mParent->s_track in strings
+	getline(mParent->s_track, sTriggerPos, ',');
+	getline(mParent->s_track, sTriggerTurnTarget, ',');
+	getline(mParent->s_track, sTriggerTurnPos, ';');
 	
 	// string to int, string to double (float)
 	mTriggerPos = atoi(sTriggerPos.c_str());
@@ -224,13 +225,13 @@ void Highway::loadTrigger(){
 	mTriggerTurnSpeed = (float)atof(sTriggerTurnPos.c_str());
 	
 	if (mTriggerPos == 0) {
-		mTriggerLoopPos = (int)g_posZf;
+		mTriggerLoopPos = (int)mParent->s_posZf;
 	}
 }
 
-void Highway::render(){
+void Highway::render(ME_Texture* texture){
 	mWidthf = 2;
-	mPosXf = (SCREEN_WIDTH / 2 - mWidthf) + ((SCREEN_WIDTH) * sin(g_roadTurn));
+	mPosXf = (SCREEN_WIDTH / 2 - mWidthf) + ((SCREEN_WIDTH) * sin(mParent->s_roadTurn));
 	
 	// Going forward/backwards and looping the texture
 	if (mClipYf >= HIGHWAY_TEX_H){ // BACKWARD
@@ -245,8 +246,8 @@ void Highway::render(){
 	mWait = 1;
 	mCloseness = 1; // cercania
 	
-	// Como g_roadAngle va a ir cambiando dentro del loop, lo "reinicio" antes de entrar
-	g_roadAngle = g_roadX - ((SCREEN_WIDTH / 4) * sin(degToRad(g_roadTurn)));
+	// Como mParent->s_roadAngle va a ir cambiando dentro del loop, lo "reinicio" antes de entrar
+	mParent->s_roadAngle = mParent->s_roadX - ((SCREEN_WIDTH / 4) * sin(degToRad(mParent->s_roadTurn)));
 	while (mPosY < SCREEN_HEIGHT){
 		
 		// prepare to render
@@ -254,15 +255,15 @@ void Highway::render(){
 		mPosX = (int)mPosXf;
 		
 		//***************** RENDER *****************
-		mTexture.render(mPosX, mPosY, &mScale, &mClip);
+		texture->render(mPosX, mPosY, &mScale, &mClip);
 		//***************** RENDER *****************
 		
 		// calculate road angle
-		mWidthf += 4* cos(degToRad(g_roadAngle));
-		mPosXf += 4* sin(degToRad(g_roadAngle));
+		mWidthf += 4* cos(degToRad(mParent->s_roadAngle));
+		mPosXf += 4* sin(degToRad(mParent->s_roadAngle));
 		
 		// roadTurn
-		g_roadAngle += g_roadTurn;
+		mParent->s_roadAngle += mParent->s_roadTurn;
 		
 		// -----TEXTURIZING based on distance
 		--mWait; // wait controla cuantos ciclos deben pasar hasta renderizar la siguiente fila

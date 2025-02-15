@@ -2,6 +2,7 @@
 #define SETUP_H
 
 #include "ME/ME_Texture.h"
+#include "ME/ME_Scene.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
@@ -29,28 +30,23 @@ extern SDL_Renderer *g_renderer;
 extern bool g_fullscreen;
 extern bool g_soft_render;
 
-// global texture list and font
-extern vector<ME_Texture*> g_textures;
-
+// font and global textures
 const int g_fontSize = 10;
 const int g_fontSpacing = 8;
 extern ME_Texture g_manusFont;
 extern ME_Texture g_hitboxTexture;
 
-// Road globals
-extern float g_posZf;
-extern float g_roadTurn;
-extern float g_roadX;
-extern float g_roadAngle;
-extern float g_vel;
-extern bool g_onRoad;
-extern ifstream g_track;
-
+// scenes
+extern ME_Scene* g_currentScene;
+extern ME_Scene* g_nextScene;
 
 //-----------------------
 // functions
 
-// define functions
+// scenes
+extern void setNextScene(ME_Scene* nextScene);
+extern void changeScene();
+
 extern bool init();
 extern void close();
 extern bool loadAssets();

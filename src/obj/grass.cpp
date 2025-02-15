@@ -36,13 +36,9 @@ Grass::Grass(){
 	mCloseness = 0; // cercania con el PoV
 	
 	//mClipYf = 0.5; // posicion del clip.y basada en la velocidad del jugador
-	
-	mTexturePath = "assets/bg/grass.png";
-	mTexture.load(mTexturePath, GRASS_TEX_W, GRASS_TEX_H);
-	g_textures.push_back(&mTexture); // add to the end of the vector/array
 }
 
-void Grass::render(float lClipYf){
+void Grass::render(ME_Texture* texture, float lClipYf){
 	
 	// Going forward/backwards and looping the texture
 	if (lClipYf >= GRASS_TEX_H){ // BACKWARD
@@ -59,7 +55,7 @@ void Grass::render(float lClipYf){
 	
 	while (mPosY < SCREEN_HEIGHT){
 		// render
-		mTexture.render(mPosX, mPosY, &mScale, &mClip);
+		texture->render(mPosX, mPosY, &mScale, &mClip);
 		
 		// -----TEXTURIZING based on distance
 		--mWait; // wait controla cuantos ciclos deben pasar hasta renderizar la siguiente fila
